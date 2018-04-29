@@ -331,19 +331,19 @@
 
 
   
-    <article id="post-微桥智能设备应用(使用node-adodb组件)" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-主题加入背景特效并做了改进" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2017/03/24/微桥智能设备应用(使用node-adodb组件)/">node.js读取access数据库，绘制微桥智能视频设备数据图表</a>
+      <a class="article-title" href="/2017/03/24/主题加入背景特效并做了改进/">主题加入背景特效并做了改进</a>
     </h1>
   
 
         
-        <a href="/2017/03/24/微桥智能设备应用(使用node-adodb组件)/" class="archive-article-date">
+        <a href="/2017/03/24/主题加入背景特效并做了改进/" class="archive-article-date">
   	<time datetime="2017-03-24T06:08:22.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-03-24</time>
 </a>
         
@@ -355,8 +355,8 @@
             <div class="article-moreinfo">
                 <div class="lastModifiedDate">
                     <span>最后更新：</span>
-                    <time datetime="2017-04-09T02:07:07.106Z" itemprop="dateLastModified">
-                    2017-04-09
+                    <time datetime="2017-04-02T12:22:01.363Z" itemprop="dateLastModified">
+                    2017-04-02
                     </time>
                 </div>
                 <div class="copyright">
@@ -365,10 +365,15 @@
                 </div>
             </div>
 
-        <h2 style="color: #A21A2D"><br><br>node.js读access数据库mdb文件：<br><br></h2>
+        <h2 style="color: #A21A2D"><br><br>yilia的背景特效的注入：<br><br></h2>
 
-<p>　　本项目使用electron打包桌面应用程序；支持微桥智能视频设备，设备自带软件显示方式单一，为了更直观的了解情况，故采用处理数据以图表形式显示的方式。<br>　　node-adodb组件支持node.js在windows读取access数据库mdb文件，并可进行sql操作。<br>　　<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#安装node-adodb组件</span></div><div class="line">npm install node-adodb</div><div class="line"><span class="comment">#基本操作，dir_path为mdb文件路径，mdb为mdb文件名</span></div><div class="line">var ADODB = require(<span class="string">'node-adodb'</span>);</div><div class="line">var connection = ADODB.open(<span class="string">'Provider=Microsoft.Jet.OLEDB.4.0;Data Source='</span>+ dir_path +<span class="string">'\\'</span> + mdb +<span class="string">';'</span>);</div><div class="line">//query操作的是有返回量的，比如查询</div><div class="line">//execute操作是没有返回量的</div><div class="line">connection</div><div class="line">	.query(<span class="string">'SELECT * FROM DATA_COUNTER WHERE DEVICE = 2;'</span>)</div><div class="line">	.once(<span class="string">'done'</span>, <span class="keyword">function</span>(datas) &#123;</div><div class="line">	    </div><div class="line">	</div><div class="line">	&#125;)</div></pre></td></tr></table></figure></p>
-<p>　　下面是软件截图<br>　　<img src="http://oilfaiu6f.bkt.clouddn.com/github/hexo/B%5DG6BS~XEZG%29K9Q%29RZI1MF2.png" width="500"></p>
+<p>　　看到<a href="http://jinfang.life/posts/c00b4e03/" target="_blank" rel="external">诗与远方</a>的博客，感觉背景特效很赞，就借鉴过来用用，酷炫的东西大家都喜欢哈。由于他是对next主题的支持，而对yilia主题的支持还需要略微的修改，接下来就说明下要修改的地方。<br>　　主要修改的 ejs 在 themes\hexo-theme-yilia-master\layout.ejs ：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#将&lt;body&gt;改为如下代码</span></div><div class="line">&lt;body style=<span class="string">"z-index: -2;"</span>&gt;</div><div class="line"><span class="comment">#在layout文件底部，加入如下代码：</span></div><div class="line">&lt;script <span class="built_in">type</span>=<span class="string">"text/javascript"</span> color=<span class="string">"64,11,244"</span> opacity=<span class="string">'1'</span> zIndex=<span class="string">"-1"</span> count=<span class="string">"90"</span>&gt;</div><div class="line">	</div><div class="line">	<span class="keyword">function</span> <span class="function"><span class="title">browserRedirect</span></span>() &#123;</div><div class="line">      var sUserAgent = navigator.userAgent.toLowerCase();</div><div class="line">      var bIsIpad = sUserAgent.match(/ipad/i) == <span class="string">"ipad"</span>;</div><div class="line">      var bIsIphoneOs = sUserAgent.match(/iphone os/i) == <span class="string">"iphone os"</span>;</div><div class="line">      var bIsMidp = sUserAgent.match(/midp/i) == <span class="string">"midp"</span>;</div><div class="line">      var bIsUc7 = sUserAgent.match(/rv:1.2.3.4/i) == <span class="string">"rv:1.2.3.4"</span>;</div><div class="line">      var bIsUc = sUserAgent.match(/ucweb/i) == <span class="string">"ucweb"</span>;</div><div class="line">      var bIsAndroid = sUserAgent.match(/android/i) == <span class="string">"android"</span>;</div><div class="line">      var bIsCE = sUserAgent.match(/windows ce/i) == <span class="string">"windows ce"</span>;</div><div class="line">      var bIsWM = sUserAgent.match(/windows mobile/i) == <span class="string">"windows mobile"</span>;</div><div class="line">      </div><div class="line">      <span class="keyword">if</span> (bIsIpad || bIsIphoneOs || bIsMidp || bIsUc7 || bIsUc || bIsAndroid || bIsCE || bIsWM) &#123;</div><div class="line"></div><div class="line">      	//document.getElementById(<span class="string">'c_n11'</span>).style.display = <span class="string">'none'</span>;</div><div class="line">      &#125; <span class="keyword">else</span> &#123;</div><div class="line"></div><div class="line">      		! <span class="function"><span class="title">function</span></span>() &#123;</div><div class="line">						<span class="keyword">function</span> o(w, v, i) &#123;</div><div class="line">							<span class="built_in">return</span> w.getAttribute(v) || i</div><div class="line">						&#125;</div><div class="line">					</div><div class="line">						<span class="keyword">function</span> j(i) &#123;</div><div class="line">							<span class="built_in">return</span> document.getElementsByTagName(i)</div><div class="line">						&#125;</div><div class="line">					</div><div class="line">						<span class="keyword">function</span> <span class="function"><span class="title">l</span></span>() &#123;</div><div class="line">							var i = j(<span class="string">"script"</span>),</div><div class="line">								w = i.length,</div><div class="line">								v = i[w - 1];</div><div class="line">							<span class="built_in">return</span> &#123;</div><div class="line">								l: w,</div><div class="line">								z: o(v, <span class="string">"zIndex"</span>, -1),</div><div class="line">								o: o(v, <span class="string">"opacity"</span>, 1),</div><div class="line">								c: o(v, <span class="string">"color"</span>, <span class="string">"220,240,120"</span>),</div><div class="line">								n: o(v, <span class="string">"count"</span>, 99)</div><div class="line">							&#125;</div><div class="line">						&#125;</div><div class="line">					</div><div class="line">						<span class="keyword">function</span> <span class="function"><span class="title">k</span></span>() &#123;</div><div class="line">							r = u.width = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth, n = u.height = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight</div><div class="line">						&#125;</div><div class="line">					</div><div class="line">						<span class="keyword">function</span> <span class="function"><span class="title">b</span></span>() &#123;</div><div class="line">							e.clearRect(0, 0, r, n);</div><div class="line">							var w = [f].concat(t);</div><div class="line">							var x, v, A, B, z, y;</div><div class="line">							t.forEach(<span class="keyword">function</span>(i) &#123;</div><div class="line">								i.x += i.xa, i.y += i.ya, i.xa *= i.x &gt; r || i.x &lt; 0 ? -1 : 1, i.ya *= i.y &gt; n || i.y &lt; 0 ? -1 : 1, e.fillRect(i.x - 0.5, i.y - 0.5, 1, 1);</div><div class="line">								<span class="keyword">for</span>(v = 0; v &lt; w.length; v++) &#123;</div><div class="line">									x = w[v];</div><div class="line">									<span class="keyword">if</span>(i !== x &amp;&amp; null !== x.x &amp;&amp; null !== x.y) &#123;</div><div class="line">										B = i.x - x.x, z = i.y - x.y, y = B * B + z * z;</div><div class="line">										y &lt; x.max &amp;&amp; (x === f &amp;&amp; y &gt;= x.max / 2 &amp;&amp; (i.x -= 0.03 * B, i.y -= 0.03 * z), A = (x.max - y) / x.max, e.beginPath(), e.lineWidth = A*2, e.strokeStyle = <span class="string">"rgba("</span> + s.c + <span class="string">","</span> + (A + 0.2) + <span class="string">")"</span>, e.moveTo(i.x, i.y), e.lineTo(x.x, x.y), e.stroke())</div><div class="line">									&#125;</div><div class="line">								&#125;</div><div class="line">								w.splice(w.indexOf(i), 1)</div><div class="line">							&#125;), m(b)</div><div class="line">						&#125;</div><div class="line">						var u = document.createElement(<span class="string">"canvas"</span>),</div><div class="line">							s = l(),</div><div class="line">							c = <span class="string">"c_n11"</span>,</div><div class="line">							e = u.getContext(<span class="string">"2d"</span>),</div><div class="line">							r, n, m = window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame || <span class="keyword">function</span>(i) &#123;</div><div class="line">								window.setTimeout(i, 1000 / 45)</div><div class="line">							&#125;,</div><div class="line">							a = Math.random,</div><div class="line">							f = &#123;</div><div class="line">								x: null,</div><div class="line">								y: null,</div><div class="line">								max: 20000</div><div class="line">							&#125;;</div><div class="line">						u.id = c;</div><div class="line">						</div><div class="line">						u.style.cssText = <span class="string">"display:black;position:absolute;top:10px;left:10px;z-index:"</span> + s.z + <span class="string">";opacity:"</span> + s.o;</div><div class="line">						j(<span class="string">"body"</span>)[0].appendChild(u);</div><div class="line">						document.getElementById(<span class="string">'c_n11'</span>).style.display = <span class="string">'black'</span>;</div><div class="line">						k(), window.onresize = k;</div><div class="line">						window.onmousemove = <span class="keyword">function</span>(i) &#123;</div><div class="line">							i = i || window.event, f.x = i.clientX, f.y = i.clientY</div><div class="line">						&#125;, window.onmouseout = <span class="function"><span class="title">function</span></span>() &#123;</div><div class="line">							f.x = null, f.y = null</div><div class="line">						&#125;;</div><div class="line">						<span class="keyword">for</span>(var t = [], p = 0; s.n &gt; p; p++) &#123;</div><div class="line">							var h = a() * r,</div><div class="line">								g = a() * n,</div><div class="line">								q = 2 * a() - 1,</div><div class="line">								d = 2 * a() - 1;</div><div class="line">							t.push(&#123;</div><div class="line">								x: h,</div><div class="line">								y: g,</div><div class="line">								xa: q,</div><div class="line">								ya: d,</div><div class="line">								max: 6000</div><div class="line">							&#125;)</div><div class="line">						&#125;</div><div class="line">						<span class="built_in">set</span>Timeout(<span class="function"><span class="title">function</span></span>() &#123;</div><div class="line">							b()</div><div class="line">						&#125;, 100)</div><div class="line">					&#125;();	</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    browserRedirect();</div><div class="line">&lt;/script&gt;</div></pre></td></tr></table></figure></p>
+<p>　　以上代码实现，背景特效canvas层不会遮挡应用层，并适应pc端和手机端(手机端显示这个特效会巨丑，所以通过判断把手机端的特效给过滤掉了)。
+　　</p>
+<h2 style="color: #A21A2D">
+
+<p>国足的大宝：</p>
+<p></p></h2><br>　　下班与好友学长一块去吃羊蝎子看球赛，甚爽，昨日预选赛中国对韩国，时下政治情况下，可谓这场比赛吸引的全国人民的眼球，最后中国足球队顶住压力1:0战胜韩国，扬眉吐气！附小图几张：<br>　　<img src="https://www.pizer.cn/images/weixin1.jpg" width="500"><br>　　<img src="https://www.pizer.cn/images/weixin2.jpg" width="500"><p></p>
 
       
 
@@ -382,19 +387,15 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">node.js</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">hexo</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">读取access数据库</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">国足大宝</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">绘制图表</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">微桥智能视频设备</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">应用于yilia的背景特效,改进的背景特效</a>
         		</li>
       		
 		</ul>
@@ -404,7 +405,7 @@
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2017/03/24/微桥智能设备应用(使用node-adodb组件)/">展开全文 >></a>
+          <a class="article-more-a" href="/2017/03/24/主题加入背景特效并做了改进/">展开全文 >></a>
         </p>
       
 
@@ -557,23 +558,15 @@
               </li>
             
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">mongodb</a>
-              </li>
-            
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">国足大宝</a>
-              </li>
-            
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">应用于yilia的背景特效,改进的背景特效</a>
-              </li>
-            
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">java</a>
               </li>
             
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">java基础函数整理</a>
+              </li>
+            
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">mongodb</a>
               </li>
             
               <li class="article-tag-list-item">
@@ -585,27 +578,15 @@
               </li>
             
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">ejs更改</a>
+                <a href="javascript:void(0)" class="js-tag color5">国足大宝</a>
               </li>
             
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">添加友情链接头像</a>
+                <a href="javascript:void(0)" class="js-tag color2">应用于yilia的背景特效,改进的背景特效</a>
               </li>
             
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">node.js</a>
-              </li>
-            
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">读取access数据库</a>
-              </li>
-            
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">绘制图表</a>
-              </li>
-            
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">微桥智能视频设备</a>
               </li>
             
               <li class="article-tag-list-item">
@@ -618,6 +599,26 @@
             
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">angular</a>
+              </li>
+            
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">ejs更改</a>
+              </li>
+            
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">添加友情链接头像</a>
+              </li>
+            
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">读取access数据库</a>
+              </li>
+            
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">绘制图表</a>
+              </li>
+            
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">微桥智能视频设备</a>
               </li>
             
               <li class="article-tag-list-item">
