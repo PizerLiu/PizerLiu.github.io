@@ -6,17 +6,20 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="https://pizerliu.github.io">
-  <title>Archives: 2017 | 木双鱼小站</title>
+  <title>mongodb复制集配置 | 木双鱼小站</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="上海大学研究生，就职于900etrip。非专业视觉设计师。此为博客一枚。">
-<meta property="og:type" content="website">
-<meta property="og:title" content="木双鱼小站">
-<meta property="og:url" content="https://pizerliu.github.io/archives/2017/page/3/index.html">
+  <meta name="description" content="本教程采用docker-compose搭建，在一台机器上搭建mongodb复制集配置。主机负责插入更新数据，从机负责查询数据。　　　首先是机器目录结构：　　　　　　　　　该目录下所有文件权限最好设置chmod 777，注意keyfileDir内的keyfile要设置chmod 600.(keyfile上一篇主从配置已经介绍)　　　create_conf.sh为未打开auth时用来生成conf">
+<meta property="og:type" content="article">
+<meta property="og:title" content="mongodb复制集配置">
+<meta property="og:url" content="https://pizerliu.github.io/2018/05/01/mongodb复制集/index.html">
 <meta property="og:site_name" content="木双鱼小站">
-<meta property="og:description" content="上海大学研究生，就职于900etrip。非专业视觉设计师。此为博客一枚。">
+<meta property="og:description" content="本教程采用docker-compose搭建，在一台机器上搭建mongodb复制集配置。主机负责插入更新数据，从机负责查询数据。　　　首先是机器目录结构：　　　　　　　　　该目录下所有文件权限最好设置chmod 777，注意keyfileDir内的keyfile要设置chmod 600.(keyfile上一篇主从配置已经介绍)　　　create_conf.sh为未打开auth时用来生成conf">
+<meta property="og:image" content="http://image.51move.cn/1%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20180501144508.png">
+<meta property="og:updated_time" content="2018-05-01T07:04:22.986Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="木双鱼小站">
-<meta name="twitter:description" content="上海大学研究生，就职于900etrip。非专业视觉设计师。此为博客一枚。">
+<meta name="twitter:title" content="mongodb复制集配置">
+<meta name="twitter:description" content="本教程采用docker-compose搭建，在一台机器上搭建mongodb复制集配置。主机负责插入更新数据，从机负责查询数据。　　　首先是机器目录结构：　　　　　　　　　该目录下所有文件权限最好设置chmod 777，注意keyfileDir内的keyfile要设置chmod 600.(keyfile上一篇主从配置已经介绍)　　　create_conf.sh为未打开auth时用来生成conf">
+<meta name="twitter:image" content="http://image.51move.cn/1%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20180501144508.png">
   
     <link rel="alternative" href="/atom.xml" title="木双鱼小站" type="application/atom+xml">
   
@@ -149,122 +152,197 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-mongodb复制集" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2017" class="archive-year">2017</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/03/24/主题加入背景特效并做了改进/" class="archive-article-date">
-  	<time datetime="2017-03-24T06:08:22.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-03-24</time>
-</a>
-        </div>
-    	 
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/03/24/主题加入背景特效并做了改进/">主题加入背景特效并做了改进</a>
+    <h1 class="article-title" itemprop="name">
+      mongodb复制集配置
     </h1>
   
 
-        <div class="article-info info-on-right">
-          
+        
+        <a href="/2018/05/01/mongodb复制集/" class="archive-article-date">
+  	<time datetime="2018-05-01T02:03:25.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-05-01</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+
+            <div class="article-moreinfo">
+                <div class="lastModifiedDate">
+                    <span>最后更新：</span>
+                    <time datetime="2018-05-01T07:04:22.986Z" itemprop="dateLastModified">
+                    2018-05-01
+                    </time>
+                </div>
+                <div class="copyright">
+                    <span>许可协议：</span>
+                    <a rel="license" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议</a>
+                </div>
+            </div>
+
+        <p>　　　本教程采用docker-compose搭建，在一台机器上搭建mongodb复制集配置。主机负责插入更新数据，从机负责查询数据。<br>　　　首先是机器目录结构：<br>　　　<img src="http://image.51move.cn/1%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20180501144508.png" alt="此处输入图片的描述"><br>　　　<br>　　　该目录下所有文件权限最好设置chmod 777，注意keyfileDir内的keyfile要设置chmod 600.(keyfile上一篇主从配置已经介绍)<br>　　　create_conf.sh为未打开auth时用来生成conf文件的脚本，代码为：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div></pre></td><td class="code"><pre><div class="line">rm -rf /root/top/mongodb_replicset/28017/conf/mongod.conf</div><div class="line">rm -rf /root/top/mongodb_replicset/28018/conf/mongod.conf</div><div class="line">rm -rf /root/top/mongodb_replicset/28019/conf/mongod.conf</div><div class="line">rm -rf /root/top/mongodb_replicset/28020/conf/mongod.conf</div><div class="line"></div><div class="line">cat &gt;&gt;/root/top/mongodb_replicset/28017/conf/mongod.conf&lt;&lt;<span class="string">'EOF'</span></div><div class="line">systemLog:</div><div class="line">  destination: file</div><div class="line">  path: <span class="string">"/usr/mongodb_logs/mongodb.log"</span></div><div class="line">  <span class="built_in">log</span>Append: <span class="literal">true</span></div><div class="line">storage:</div><div class="line">  journal:</div><div class="line">    enabled: <span class="literal">true</span></div><div class="line">  dbPath: <span class="string">"/usr/mongodb_data"</span></div><div class="line">  directoryPerDB: <span class="literal">true</span></div><div class="line">  <span class="comment">#engine: wiredTiger</span></div><div class="line">  wiredTiger:</div><div class="line">    engineConfig:</div><div class="line">      <span class="comment"># cacheSizeGB: 1</span></div><div class="line">      directoryForIndexes: <span class="literal">true</span></div><div class="line">    collectionConfig:</div><div class="line">      blockCompressor: zlib</div><div class="line">    indexConfig:</div><div class="line">      prefixCompression: <span class="literal">true</span></div><div class="line"><span class="comment"># security:</span></div><div class="line"><span class="comment">#   authorization: disabled</span></div><div class="line"><span class="comment">#   keyFile: "/usr/mongodb_key/keyfile"</span></div><div class="line">net:</div><div class="line">  port: 28017</div><div class="line">replication:</div><div class="line">  oplogSizeMB: 2048</div><div class="line">  replSetName: my_repl</div><div class="line">EOF</div><div class="line"></div><div class="line">cat &gt;&gt;/root/top/mongodb_replicset/28018/conf/mongod.conf&lt;&lt;<span class="string">'EOF'</span></div><div class="line">systemLog:</div><div class="line">  destination: file</div><div class="line">  path: <span class="string">"/usr/mongodb_logs/mongodb.log"</span></div><div class="line">  <span class="built_in">log</span>Append: <span class="literal">true</span></div><div class="line">storage:</div><div class="line">  journal:</div><div class="line">    enabled: <span class="literal">true</span></div><div class="line">  dbPath: <span class="string">"/usr/mongodb_data"</span></div><div class="line">  directoryPerDB: <span class="literal">true</span></div><div class="line">  <span class="comment">#engine: wiredTiger</span></div><div class="line">  wiredTiger:</div><div class="line">    engineConfig:</div><div class="line">      <span class="comment"># cacheSizeGB: 1</span></div><div class="line">      directoryForIndexes: <span class="literal">true</span></div><div class="line">    collectionConfig:</div><div class="line">      blockCompressor: zlib</div><div class="line">    indexConfig:</div><div class="line">      prefixCompression: <span class="literal">true</span></div><div class="line"><span class="comment"># security:</span></div><div class="line"><span class="comment">#   authorization: disabled</span></div><div class="line"><span class="comment">#   keyFile: "/usr/mongodb_key/keyfile"</span></div><div class="line">net:</div><div class="line">  port: 28018</div><div class="line">replication:</div><div class="line">  oplogSizeMB: 2048</div><div class="line">  replSetName: my_repl</div><div class="line">EOF</div><div class="line"></div><div class="line">cat &gt;&gt;/root/top/mongodb_replicset/28019/conf/mongod.conf&lt;&lt;<span class="string">'EOF'</span></div><div class="line">systemLog:</div><div class="line">  destination: file</div><div class="line">  path: <span class="string">"/usr/mongodb_logs/mongodb.log"</span></div><div class="line">  <span class="built_in">log</span>Append: <span class="literal">true</span></div><div class="line">storage:</div><div class="line">  journal:</div><div class="line">    enabled: <span class="literal">true</span></div><div class="line">  dbPath: <span class="string">"/usr/mongodb_data"</span></div><div class="line">  directoryPerDB: <span class="literal">true</span></div><div class="line">  <span class="comment">#engine: wiredTiger</span></div><div class="line">  wiredTiger:</div><div class="line">    engineConfig:</div><div class="line">      <span class="comment"># cacheSizeGB: 1</span></div><div class="line">      directoryForIndexes: <span class="literal">true</span></div><div class="line">    collectionConfig:</div><div class="line">      blockCompressor: zlib</div><div class="line">    indexConfig:</div><div class="line">      prefixCompression: <span class="literal">true</span></div><div class="line"><span class="comment"># security:</span></div><div class="line"><span class="comment">#   authorization: disabled</span></div><div class="line"><span class="comment">#   keyFile: "/usr/mongodb_key/keyfile"</span></div><div class="line">net:</div><div class="line">  port: 28019</div><div class="line">replication:</div><div class="line">  oplogSizeMB: 2048</div><div class="line">  replSetName: my_repl</div><div class="line">EOF</div><div class="line"></div><div class="line">cat &gt;&gt;/root/top/mongodb_replicset/28020/conf/mongod.conf&lt;&lt;<span class="string">'EOF'</span></div><div class="line">systemLog:</div><div class="line">  destination: file</div><div class="line">  path: <span class="string">"/usr/mongodb_logs/mongodb.log"</span></div><div class="line">  <span class="built_in">log</span>Append: <span class="literal">true</span></div><div class="line">storage:</div><div class="line">  journal:</div><div class="line">    enabled: <span class="literal">true</span></div><div class="line">  dbPath: <span class="string">"/usr/mongodb_data"</span></div><div class="line">  directoryPerDB: <span class="literal">true</span></div><div class="line">  <span class="comment">#engine: wiredTiger</span></div><div class="line">  wiredTiger:</div><div class="line">    engineConfig:</div><div class="line">      <span class="comment"># cacheSizeGB: 1</span></div><div class="line">      directoryForIndexes: <span class="literal">true</span></div><div class="line">    collectionConfig:</div><div class="line">      blockCompressor: zlib</div><div class="line">    indexConfig:</div><div class="line">      prefixCompression: <span class="literal">true</span></div><div class="line"><span class="comment"># security:</span></div><div class="line"><span class="comment">#   authorization: disabled</span></div><div class="line"><span class="comment">#   keyFile: "/usr/mongodb_key/keyfile"</span></div><div class="line">net:</div><div class="line">  port: 28020</div><div class="line">replication:</div><div class="line">  oplogSizeMB: 2048</div><div class="line">  replSetName: my_repl</div><div class="line">EOF</div></pre></td></tr></table></figure></p>
+<p>create_conf_auth.sh为打开auth时用来生成conf文件的脚本，代码为：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div></pre></td><td class="code"><pre><div class="line">rm -rf /root/top/mongodb_replicset/28017/conf/mongod.conf</div><div class="line">rm -rf /root/top/mongodb_replicset/28018/conf/mongod.conf</div><div class="line">rm -rf /root/top/mongodb_replicset/28019/conf/mongod.conf</div><div class="line">rm -rf /root/top/mongodb_replicset/28020/conf/mongod.conf</div><div class="line"></div><div class="line">cat &gt;&gt;/root/top/mongodb_replicset/28017/conf/mongod.conf&lt;&lt;<span class="string">'EOF'</span></div><div class="line">systemLog:</div><div class="line">  destination: file</div><div class="line">  path: <span class="string">"/usr/mongodb_logs/mongodb.log"</span></div><div class="line">  <span class="built_in">log</span>Append: <span class="literal">true</span></div><div class="line">storage:</div><div class="line">  journal:</div><div class="line">    enabled: <span class="literal">true</span></div><div class="line">  dbPath: <span class="string">"/usr/mongodb_data"</span></div><div class="line">  directoryPerDB: <span class="literal">true</span></div><div class="line">  <span class="comment">#engine: wiredTiger</span></div><div class="line">  wiredTiger:</div><div class="line">    engineConfig:</div><div class="line">      <span class="comment"># cacheSizeGB: 1</span></div><div class="line">      directoryForIndexes: <span class="literal">true</span></div><div class="line">    collectionConfig:</div><div class="line">      blockCompressor: zlib</div><div class="line">    indexConfig:</div><div class="line">      prefixCompression: <span class="literal">true</span></div><div class="line">security:</div><div class="line">  authorization: <span class="built_in">enable</span></div><div class="line">  keyFile: <span class="string">"/usr/mongodb_key/keyfile"</span></div><div class="line">net:</div><div class="line">  port: 28017</div><div class="line">replication:</div><div class="line">  oplogSizeMB: 2048</div><div class="line">  replSetName: my_repl</div><div class="line">EOF</div><div class="line"></div><div class="line">cat &gt;&gt;/root/top/mongodb_replicset/28018/conf/mongod.conf&lt;&lt;<span class="string">'EOF'</span></div><div class="line">systemLog:</div><div class="line">  destination: file</div><div class="line">  path: <span class="string">"/usr/mongodb_logs/mongodb.log"</span></div><div class="line">  <span class="built_in">log</span>Append: <span class="literal">true</span></div><div class="line">storage:</div><div class="line">  journal:</div><div class="line">    enabled: <span class="literal">true</span></div><div class="line">  dbPath: <span class="string">"/usr/mongodb_data"</span></div><div class="line">  directoryPerDB: <span class="literal">true</span></div><div class="line">  <span class="comment">#engine: wiredTiger</span></div><div class="line">  wiredTiger:</div><div class="line">    engineConfig:</div><div class="line">      <span class="comment"># cacheSizeGB: 1</span></div><div class="line">      directoryForIndexes: <span class="literal">true</span></div><div class="line">    collectionConfig:</div><div class="line">      blockCompressor: zlib</div><div class="line">    indexConfig:</div><div class="line">      prefixCompression: <span class="literal">true</span></div><div class="line">security:</div><div class="line">  authorization: <span class="built_in">enable</span></div><div class="line">  keyFile: <span class="string">"/usr/mongodb_key/keyfile"</span></div><div class="line">net:</div><div class="line">  port: 28018</div><div class="line">replication:</div><div class="line">  oplogSizeMB: 2048</div><div class="line">  replSetName: my_repl</div><div class="line">EOF</div><div class="line"></div><div class="line">cat &gt;&gt;/root/top/mongodb_replicset/28019/conf/mongod.conf&lt;&lt;<span class="string">'EOF'</span></div><div class="line">systemLog:</div><div class="line">  destination: file</div><div class="line">  path: <span class="string">"/usr/mongodb_logs/mongodb.log"</span></div><div class="line">  <span class="built_in">log</span>Append: <span class="literal">true</span></div><div class="line">storage:</div><div class="line">  journal:</div><div class="line">    enabled: <span class="literal">true</span></div><div class="line">  dbPath: <span class="string">"/usr/mongodb_data"</span></div><div class="line">  directoryPerDB: <span class="literal">true</span></div><div class="line">  <span class="comment">#engine: wiredTiger</span></div><div class="line">  wiredTiger:</div><div class="line">    engineConfig:</div><div class="line">      <span class="comment"># cacheSizeGB: 1</span></div><div class="line">      directoryForIndexes: <span class="literal">true</span></div><div class="line">    collectionConfig:</div><div class="line">      blockCompressor: zlib</div><div class="line">    indexConfig:</div><div class="line">      prefixCompression: <span class="literal">true</span></div><div class="line">security:</div><div class="line">  authorization: <span class="built_in">enable</span></div><div class="line">  keyFile: <span class="string">"/usr/mongodb_key/keyfile"</span></div><div class="line">net:</div><div class="line">  port: 28019</div><div class="line">replication:</div><div class="line">  oplogSizeMB: 2048</div><div class="line">  replSetName: my_repl</div><div class="line">EOF</div><div class="line"></div><div class="line">cat &gt;&gt;/root/top/mongodb_replicset/28020/conf/mongod.conf&lt;&lt;<span class="string">'EOF'</span></div><div class="line">systemLog:</div><div class="line">  destination: file</div><div class="line">  path: <span class="string">"/usr/mongodb_logs/mongodb.log"</span></div><div class="line">  <span class="built_in">log</span>Append: <span class="literal">true</span></div><div class="line">storage:</div><div class="line">  journal:</div><div class="line">    enabled: <span class="literal">true</span></div><div class="line">  dbPath: <span class="string">"/usr/mongodb_data"</span></div><div class="line">  directoryPerDB: <span class="literal">true</span></div><div class="line">  <span class="comment">#engine: wiredTiger</span></div><div class="line">  wiredTiger:</div><div class="line">    engineConfig:</div><div class="line">      <span class="comment"># cacheSizeGB: 1</span></div><div class="line">      directoryForIndexes: <span class="literal">true</span></div><div class="line">    collectionConfig:</div><div class="line">      blockCompressor: zlib</div><div class="line">    indexConfig:</div><div class="line">      prefixCompression: <span class="literal">true</span></div><div class="line">security:</div><div class="line">  authorization: <span class="built_in">enable</span></div><div class="line">  keyFile: <span class="string">"/usr/mongodb_key/keyfile"</span></div><div class="line">net:</div><div class="line">  port: 28020</div><div class="line">replication:</div><div class="line">  oplogSizeMB: 2048</div><div class="line">  replSetName: my_repl</div><div class="line">EOF</div></pre></td></tr></table></figure></p>
+<p>　　注意：所有的mongodb.log文件还有keyfile文件，切记不能为root用户权限，需要修改，否则docker内环境读不到。例如下面代码修改：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">chown polkitd keyfile</div></pre></td></tr></table></figure></p>
+<p>　　执行create_conf.sh，生成配置文件后，执行以下mongodb_replicset.yml代码，docker-compose -f mongodb_MS.yml up -d<br>　　<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div></pre></td><td class="code"><pre><div class="line">version: <span class="string">"2.1"</span></div><div class="line">networks:</div><div class="line">  default:</div><div class="line">    external:</div><div class="line">      name: pizer_local_network</div><div class="line">services:</div><div class="line">  pizer_env_mongodb_28017:</div><div class="line">    image: <span class="string">'docker.io/mongo:3.6-rc'</span></div><div class="line">    container_name: pizer_env_mongodb_28017</div><div class="line">    hostname: pizer_env_mongodb_28017</div><div class="line">    ports:</div><div class="line">      - 28017:28017</div><div class="line">    volumes:</div><div class="line">      - /root/top/mongodb_replicset/28017/<span class="built_in">log</span>:/usr/mongodb_logs</div><div class="line">      - /root/top/mongodb_replicset/28017/data:/usr/mongodb_data</div><div class="line">      - /root/top/mongodb_replicset/keyfileDir:/usr/mongodb_key</div><div class="line">      - /root/top/mongodb_replicset/28017/conf:/usr/mongodb_conf</div><div class="line">    <span class="built_in">command</span>:</div><div class="line">      [<span class="string">'--bind_ip_all'</span>,<span class="string">'--config=/usr/mongodb_conf/mongod.conf'</span>]</div><div class="line">  pizer_env_mongodb_28018:</div><div class="line">    image: <span class="string">'docker.io/mongo:3.6-rc'</span></div><div class="line">    container_name: pizer_env_mongodb_28018</div><div class="line">    hostname: pizer_env_mongodb_28018</div><div class="line">    ports:</div><div class="line">      - 28018:28018</div><div class="line">    volumes:      </div><div class="line">      - /root/top/mongodb_replicset/28018/<span class="built_in">log</span>:/usr/mongodb_logs</div><div class="line">      - /root/top/mongodb_replicset/28018/data:/usr/mongodb_data</div><div class="line">      - /root/top/mongodb_replicset/keyfileDir:/usr/mongodb_key</div><div class="line">      - /root/top/mongodb_replicset/28018/conf:/usr/mongodb_conf</div><div class="line">    <span class="built_in">command</span>:</div><div class="line">      [<span class="string">'--bind_ip_all'</span>,<span class="string">'--config=/usr/mongodb_conf/mongod.conf'</span>]</div><div class="line">  pizer_env_mongodb_28019:</div><div class="line">    image: <span class="string">'docker.io/mongo:3.6-rc'</span></div><div class="line">    container_name: pizer_env_mongodb_28019</div><div class="line">    hostname: pizer_env_mongodb_28019</div><div class="line">    ports:</div><div class="line">      - 28019:28019</div><div class="line">    volumes:      </div><div class="line">      - /root/top/mongodb_replicset/28019/<span class="built_in">log</span>:/usr/mongodb_logs</div><div class="line">      - /root/top/mongodb_replicset/28019/data:/usr/mongodb_data</div><div class="line">      - /root/top/mongodb_replicset/keyfileDir:/usr/mongodb_key</div><div class="line">      - /root/top/mongodb_replicset/28019/conf:/usr/mongodb_conf</div><div class="line">    <span class="built_in">command</span>:</div><div class="line">      [<span class="string">'--bind_ip_all'</span>,<span class="string">'--config=/usr/mongodb_conf/mongod.conf'</span>]</div><div class="line">  pizer_env_mongodb_28020:</div><div class="line">    image: <span class="string">'docker.io/mongo:3.6-rc'</span></div><div class="line">    container_name: pizer_env_mongodb_28020</div><div class="line">    hostname: pizer_env_mongodb_28020</div><div class="line">    ports:</div><div class="line">      - 28020:28020</div><div class="line">    volumes:      </div><div class="line">      - /root/top/mongodb_replicset/28020/<span class="built_in">log</span>:/usr/mongodb_logs</div><div class="line">      - /root/top/mongodb_replicset/28020/data:/usr/mongodb_data</div><div class="line">      - /root/top/mongodb_replicset/keyfileDir:/usr/mongodb_key</div><div class="line">      - /root/top/mongodb_replicset/28020/conf:/usr/mongodb_conf</div><div class="line">    <span class="built_in">command</span>:</div><div class="line">      [<span class="string">'--bind_ip_all'</span>,<span class="string">'--config=/usr/mongodb_conf/mongod.conf'</span>]</div></pre></td></tr></table></figure></p>
+<p>　　无auth启动后，设置用户权限：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">use admin</div><div class="line"><span class="comment">#创建root用户</span></div><div class="line">db.createUser(</div><div class="line">  &#123;</div><div class="line">    user: <span class="string">"root"</span>,</div><div class="line">    <span class="built_in">pwd</span>: <span class="string">"zxc`12`12"</span>,</div><div class="line">    roles: [ &#123; role: <span class="string">"root"</span>, db: <span class="string">"admin"</span> &#125; ]</div><div class="line">  &#125;</div><div class="line">)</div><div class="line"><span class="comment">#验证权限</span></div><div class="line">use admin</div><div class="line">db.auth(<span class="string">'root'</span>,<span class="string">'zxc`12`12'</span>)</div><div class="line"><span class="comment">#创建登陆用户（允许读写）</span></div><div class="line">use <span class="built_in">test</span></div><div class="line">db.createUser(</div><div class="line">  &#123;</div><div class="line">    user: <span class="string">"pizer"</span>,</div><div class="line">    <span class="built_in">pwd</span>: <span class="string">"zxc`12`12"</span>,</div><div class="line">    roles: [ &#123; role: <span class="string">"readWrite"</span>, db: <span class="string">"test"</span> &#125; ]</div><div class="line">  &#125;</div><div class="line">)</div></pre></td></tr></table></figure></p>
+<p>　　然后执行create_conf_auth.sh，，生成配置文件后，再次执行mongodb_replicset.yml代码，docker-compose -f mongodb_MS.yml up -d，则mongodb复制集建立成功。</p>
+
+      
+
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    <div class="reward-box-item">
+                      <img class="reward-img" src="https://pizerliu.github.io/202301438656310525.jpg">
+                      <span class="reward-type">支付宝</span>
+                    </div>
+                    
+                    
+                    <div class="reward-box-item">
+                      <img class="reward-img" src="https://pizerliu.github.io/510258426500352340.png">
+                      <span class="reward-type">微信</span>
+                    </div>
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">hexo</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">国足大宝</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">应用于yilia的背景特效,改进的背景特效</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">mongodb</a>
         		</li>
       		
 		</ul>
 	</div>
 
-          
+      
 
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="http://s.jiathis.com/qrcode.php?url=https://pizerliu.github.io/2018/05/01/mongodb复制集/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/03/24/微桥智能设备应用(使用node-adodb组件)/" class="archive-article-date">
-  	<time datetime="2017-03-24T06:08:22.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-03-24</time>
-</a>
-        </div>
-    	 
+<nav id="article-nav">
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/03/24/微桥智能设备应用(使用node-adodb组件)/">node.js读取access数据库，绘制微桥智能视频设备数据图表</a>
-    </h1>
+  
+    <a href="/2018/04/29/mongodb主从配置/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">mongodb主从配置</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+
+
+
+
+  
+    <div class="duoshuo"></div>
   
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">node.js</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">读取access数据库</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">绘制图表</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">微桥智能视频设备</a>
-        		</li>
-      		
-		</ul>
-	</div>
 
-          
 
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
-  
-
-    
-    <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/archives/2017/page/2/">&laquo; Prev</a><a class="page-number" href="/archives/2017/">1</a><a class="page-number" href="/archives/2017/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/archives/2017/page/4/">4</a><a class="page-number" href="/archives/2017/page/5/">5</a><a class="extend next" rel="next" href="/archives/2017/page/4/">Next &raquo;</a>
-    </nav>
-  
+  <section id="comments">
+    <!-- 多说评论框 start -->
+    <div class="ds-thread" data-thread-key="post-mongodb复制集" data-title="mongodb复制集配置" data-url="https://pizerliu.github.io/2018/05/01/mongodb复制集/"></div>
+    <!-- 多说评论框 end -->
+    <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+    <script type="text/javascript">
+    var duoshuoQuery = {short_name:'pizer'};
+      (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0]
+         || document.getElementsByTagName('body')[0]).appendChild(ds);
+      })();
+      </script>
+    <!-- 多说公共JS代码 end -->
+  </section>
 
 
           </div>
@@ -301,8 +379,8 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,

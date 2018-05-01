@@ -151,6 +151,105 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-机器学习基础之CNN" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/10/27/机器学习基础之CNN/">机器学习之CNN</a>
+    </h1>
+  
+
+        
+        <a href="/2017/10/27/机器学习基础之CNN/" class="archive-article-date">
+  	<time datetime="2017-10-27T01:57:31.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-10-27</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+
+            <div class="article-moreinfo">
+                <div class="lastModifiedDate">
+                    <span>最后更新：</span>
+                    <time datetime="2017-10-27T03:16:11.271Z" itemprop="dateLastModified">
+                    2017-10-27
+                    </time>
+                </div>
+                <div class="copyright">
+                    <span>许可协议：</span>
+                    <a rel="license" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议</a>
+                </div>
+            </div>
+
+        <h2><br>——  step.1 数据集<br></h2>
+
+<p>　　　首先根据自己想达到的目的，来建立正样本数据集和负样本数据集（ps：如果检测是否有人，正样本及有人的图片，负样本就是为你不想判定为有人的图片），当然如果有已经开源的数据集，我们当然直接拿来用就好。<br>　　　接下来推荐几个学习时使用的不错数据集：<br>　　　1. <a href="http://yann.lecun.com/exdb/mnist/" target="_blank" rel="external">MNIST</a> —— 一个手写数字的数据集<br>　　　2. <a href="http://www.sogou.com/labs/dl/p.html" target="_blank" rel="external">搜狗实验室数据集</a> —— 搜狗收集了包括人物、动物、建筑、机械、风景、运动等类别<br>　　　3. <a href="http://www.image-net.org/" target="_blank" rel="external">ImageNet</a> —— 一个计算机视觉系统识别项目，是目前世界上图像识别最大的数据库</p>
+<h2><br>——  step.2 CNN介绍<br></h2>
+
+<p>卷积　　　神经网络判断一个图片是否包含“人”的过程，包括四个步骤：</p>
+<ol>
+<li>图像输入（InputImage）→</li>
+<li>卷积（Convolution）→</li>
+<li>最大池化（MaxPooling）→</li>
+<li>全连接神经网络（Fully-ConnectedNeural Network）计算 →</li>
+</ol>
+<p>步骤如下图：</p>
+<p><img src="http://oilfaiu6f.bkt.clouddn.com/CNN/579b28d7ebe2b.jpg" width="800" height="400"></p>
+<p>　　　了解传统的神经网络的就知道，作为神经元的感知机模型十分简单，如全连接层的网络结构，采用矩阵相乘然后进行非线性变换。<br>　　　感知机模型：<br>　　　　　　　　　　　　　　　f(x) = sign( Wx + b )<br>　　　传统神经网络的劣势在于，当需要处理一个400<em>400</em>3的RGB图片时，一张图就需要处理较大的数据量，占用的内存空间会巨大，还必将导致收敛速度慢，使得需要更多训练数据以及更多的迭代。另一方面，全连接网络结构在处理每一个像素时，其相邻像素和距离很远像素都是无差别对待的，并没有考虑图像内容的空间结构。<br>　　　<br>　　　通过认识到上面的不足，卷积神经网络产生了，卷积神经网络指的是至少有一层计算为卷积操作的神经网络。卷机操作是其中的核心，他充分利用了图片中相邻区域的信息，通过稀疏连接和共享权值的方式大大减少了参数矩阵的规模，从而减少计算量，也提高了收敛速度。<br>　　　<br>　　　所谓的卷积核，其实就是一个权值矩阵，表示如何处理单个像素与邻域像素之间的关系。卷积核的各个元素相对差值较小，就相当于每个像素和周围像素取了个平均值，也就有了模糊降噪的效果。而卷积核的各个元素相对差值较大，就拉大了每个像素和周围像素的差距，也就可以提取边缘，达到锐化的效果。（卷积核元素累加为0时，图片输出亮度会很低，但不会全黑，大部分是黑色，有部分图案边缘存在，也就做到边缘提取了）<br>　　　<br>　　　但是，我怎么才知道我们想要的卷积核参数那？<br>　　　<br>　　　通过卷机操作和反向传播算法结合，通过大量图片让程序自己学习出卷积核参数即可。<br>　　　传统神经网络，对于一张1000x1000像素的图来说，就会有多达10万个输入。而对于CNN来说，如果使用的10x10的卷积核，每个节点就只有100个输入，对应100个权值，数量级大大减小。</p>
+<h2><br>——  step.3 tensorflow对CNN的项目实现<br></h2>
+
+<p>　　　实现CNN时会用到：<br>　　　1. 池化 pooling： 一种是最大池化（max pooling），在定义窗口内取最大值。另一种是平均池化（average pooling）.池化主要作用是降维。<br>　　　2. 激活函数 Relu：将一个特征空间的向量通过非线性变换映射到另一个空间中才能实现线性可分。它的优点在于分类效果好，收敛速度快，计算速度快。<br>　　　3. 多层卷积：将对前面提取的细节特征进行再次提取组合，相当于把视野放大，提取出更完整，更抽象的特征。<br>　　　4. Dropout：过拟合是指训练结果在训练集和测试集上表现差别很大的情况。</p>
+<p></p><h3 style="color:red"><br>代码实现：<br></h3><br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div><div class="line">138</div><div class="line">139</div><div class="line">140</div><div class="line">141</div><div class="line">142</div><div class="line">143</div><div class="line">144</div><div class="line">145</div><div class="line">146</div><div class="line">147</div><div class="line">148</div><div class="line">149</div><div class="line">150</div><div class="line">151</div><div class="line">152</div><div class="line">153</div><div class="line">154</div><div class="line">155</div><div class="line">156</div><div class="line">157</div><div class="line">158</div><div class="line">159</div><div class="line">160</div><div class="line">161</div><div class="line">162</div><div class="line">163</div><div class="line">164</div><div class="line">165</div><div class="line">166</div><div class="line">167</div><div class="line">168</div><div class="line">169</div><div class="line">170</div><div class="line">171</div><div class="line">172</div><div class="line">173</div><div class="line">174</div><div class="line">175</div><div class="line">176</div><div class="line">177</div><div class="line">178</div><div class="line">179</div></pre></td><td class="code"><pre><div class="line">import tensorflow as tf</div><div class="line">import numpy as np</div><div class="line">import os</div><div class="line">from ssutils import *</div><div class="line"></div><div class="line"><span class="comment"># 图像二值化</span></div><div class="line"><span class="comment"># grayed_image = tf.image.rgb_to_grayscale(image0)</span></div><div class="line"></div><div class="line">true_path = <span class="string">'F:/机器学习/目标检测/jiji_test/true_image/正/'</span></div><div class="line">false_path = <span class="string">'F:/机器学习/目标检测/jiji_test/false_image/负/'</span></div><div class="line"></div><div class="line"><span class="comment"># 函数声明部分</span></div><div class="line"></div><div class="line">def weight_variable(shape):</div><div class="line">    <span class="comment"># 正态分布，标准差为0.1，默认最大为1，最小为-1，均值为0</span></div><div class="line">    initial = tf.truncated_normal(shape, dtype=tf.float32, stddev=0.1)</div><div class="line">    <span class="built_in">return</span> tf.Variable(initial)</div><div class="line"></div><div class="line"></div><div class="line">def bias_variable(shape):</div><div class="line">    <span class="comment"># 创建一个结构为shape矩阵也可以说是数组shape声明其行列，初始化所有值为0.1</span></div><div class="line">    initial = tf.constant(0.1, dtype=tf.float32, shape=shape)</div><div class="line">    <span class="built_in">return</span> tf.Variable(initial)</div><div class="line"></div><div class="line"></div><div class="line">def conv2d(x, W):</div><div class="line">    <span class="comment"># 卷积遍历各方向步数为1，SAME：边缘外自动补0，遍历相乘</span></div><div class="line">    <span class="built_in">return</span> tf.nn.conv2d(x, W, strides=[1, 1, 1, 1], padding=<span class="string">'SAME'</span>)</div><div class="line"></div><div class="line"></div><div class="line">def max_pool_2x2(x):</div><div class="line">    <span class="comment"># 池化卷积结果（conv2d）池化层采用kernel大小为2*2，步数也为2，周围补0，取最大值。数据量缩小了4倍</span></div><div class="line">    <span class="built_in">return</span> tf.nn.max_pool(x, ksize=[1, 2, 2, 1], strides=[1, 2, 2, 1], padding=<span class="string">'SAME'</span>)</div><div class="line"></div><div class="line"><span class="comment"># 读取数据</span></div><div class="line">def read_img(true_path,false_path):</div><div class="line">    imgs = []</div><div class="line">    labels = []</div><div class="line"></div><div class="line">    cate = [true_path + x <span class="keyword">for</span> x <span class="keyword">in</span> os.listdir(true_path)]  <span class="comment"># os.path.isdir(path + x)</span></div><div class="line"></div><div class="line">    <span class="keyword">for</span> idx, folder <span class="keyword">in</span> enumerate(cate):</div><div class="line"></div><div class="line">        img = imread(folder)</div><div class="line">        <span class="comment"># img = transform.resize(img, (w, h, c))</span></div><div class="line">        imgs.append(img)</div><div class="line">        labels.append(np.array([0.,1.]))</div><div class="line"></div><div class="line">    cate = [false_path + x <span class="keyword">for</span> x <span class="keyword">in</span> os.listdir(false_path)]  <span class="comment"># os.path.isdir(path + x)</span></div><div class="line"></div><div class="line">    <span class="keyword">for</span> idx, folder <span class="keyword">in</span> enumerate(cate):</div><div class="line"></div><div class="line">        img = imread(folder)</div><div class="line">        <span class="comment"># img = transform.resize(img, (w, h, c))</span></div><div class="line">        imgs.append(img)</div><div class="line">        labels.append(np.array([1.,0.]))</div><div class="line"></div><div class="line">    c = list(zip(imgs, labels))</div><div class="line">    random.shuffle(c)</div><div class="line">    imgs[:], labels[:] = zip(*c)</div><div class="line"></div><div class="line">    <span class="built_in">return</span> np.asarray(imgs, np.float32)/255-0.5, np.asarray(labels, np.float32)</div><div class="line"></div><div class="line"><span class="comment"># 声明一个占位符，None表示输入图片的数量不定，240*320*4图片分辨率</span></div><div class="line">xs = tf.placeholder(tf.float32, [None, 240,320,4])</div><div class="line"><span class="comment"># 类别是0-1总共2个类别，对应输出分类结果</span></div><div class="line">ys = tf.placeholder(tf.float32, [None, 2])</div><div class="line">keep_prob = tf.placeholder(tf.float32)</div><div class="line"><span class="comment"># x_image又把xs reshape成了240*320*4的形状.作为训练时的input，-1代表图片数量不定</span></div><div class="line">x_image = tf.reshape(xs, [-1, 240, 320, 4])</div><div class="line"></div><div class="line"></div><div class="line"><span class="comment">## 第一层卷积操作 ##</span></div><div class="line"><span class="comment"># 第一二参数值得卷积核尺寸大小，即patch，第三个参数是图像通道数，第四个参数是卷积核的数目，代表会出现多少个卷积特征图像;</span></div><div class="line">W_conv1 = weight_variable([5, 5, 4, 32])</div><div class="line"><span class="comment"># 对于每一个卷积核都有一个对应的偏置量。</span></div><div class="line">b_conv1 = bias_variable([32])</div><div class="line"><span class="comment"># 图片乘以卷积核，并加上偏执量，卷积结果240x320x32</span></div><div class="line">h_conv1 = tf.nn.relu(conv2d(x_image, W_conv1) + b_conv1)</div><div class="line"><span class="comment"># 池化结果120x160x32 卷积结果乘以池化卷积核</span></div><div class="line">h_pool1 = max_pool_2x2(h_conv1)</div><div class="line"></div><div class="line"><span class="comment">## 第二层卷积操作 ##</span></div><div class="line"><span class="comment"># 第一二参数值得卷积核尺寸大小，即patch，第三个参数是图像通道数，第四个参数是卷积核的数目，代表会出现多少个卷积特征图像;</span></div><div class="line">W_conv2 = weight_variable([5, 5, 32, 64])</div><div class="line"><span class="comment"># 对于每一个卷积核都有一个对应的偏置量。</span></div><div class="line">b_conv2 = bias_variable([64])</div><div class="line"><span class="comment"># 图片乘以卷积核，并加上偏执量，卷积结果120x160x64</span></div><div class="line">h_conv2 = tf.nn.relu(conv2d(h_pool1, W_conv2) + b_conv2)</div><div class="line"><span class="comment"># 池化结果60x80x64 卷积结果乘以池化卷积核</span></div><div class="line">h_pool2 = max_pool_2x2(h_conv2)</div><div class="line"></div><div class="line"><span class="comment">## 第三层卷积操作 ##</span></div><div class="line"><span class="comment"># 第一二参数值得卷积核尺寸大小，即patch，第三个参数是图像通道数，第四个参数是卷积核的数目，代表会出现多少个卷积特征图像;</span></div><div class="line">W_conv3 = weight_variable([5, 5, 64, 128])</div><div class="line"><span class="comment"># 对于每一个卷积核都有一个对应的偏置量。</span></div><div class="line">b_conv3 = bias_variable([128])</div><div class="line"><span class="comment"># 图片乘以卷积核，并加上偏执量，卷积结果60x80x128</span></div><div class="line">h_conv3 = tf.nn.relu(conv2d(h_pool2, W_conv3) + b_conv3)</div><div class="line"><span class="comment"># 池化结果30x40x128 卷积结果乘以池化卷积核</span></div><div class="line">h_pool3 = max_pool_2x2(h_conv3)</div><div class="line"></div><div class="line"><span class="comment">## 第四层卷积操作 ##</span></div><div class="line"><span class="comment"># 第一二参数值得卷积核尺寸大小，即patch，第三个参数是图像通道数，第四个参数是卷积核的数目，代表会出现多少个卷积特征图像;</span></div><div class="line">W_conv4 = weight_variable([5, 5, 128, 256])</div><div class="line"><span class="comment"># 对于每一个卷积核都有一个对应的偏置量。</span></div><div class="line">b_conv4 = bias_variable([256])</div><div class="line"><span class="comment"># 图片乘以卷积核，并加上偏执量，卷积结果30x40x256</span></div><div class="line">h_conv4 = tf.nn.relu(conv2d(h_pool3, W_conv4) + b_conv4)</div><div class="line"><span class="comment"># 池化结果15x20x256 卷积结果乘以池化卷积核</span></div><div class="line">h_pool4 = max_pool_2x2(h_conv4)</div><div class="line"></div><div class="line"><span class="comment">## 第五层全连接操作 ##</span></div><div class="line"><span class="comment"># 二维张量，第一个参数15x20x256的patch，也可以认为是只有一行7*7*64个数据的卷积，第二个参数代表卷积个数共1024个</span></div><div class="line">shape = int(np.prod(h_pool4.get_shape()[1:]))</div><div class="line">W_fc1 = weight_variable([shape, 1024])</div><div class="line"><span class="comment"># 1024个偏执数据</span></div><div class="line">b_fc1 = bias_variable([1024])</div><div class="line"><span class="comment"># 将第二层卷积池化结果reshape成只有一行15x20x256个数据# [n_samples, 15, 20, 256] -&gt;&gt; [n_samples, 15x20x256]</span></div><div class="line">h_pool2_flat = tf.reshape(h_pool4, [-1, shape])</div><div class="line"><span class="comment"># 卷积操作，结果是1*1*1024，单行乘以单列等于1*1矩阵，matmul实现最基本的矩阵相乘，不同于tf.nn.conv2d的遍历相乘，自动认为是前行向量后列向量</span></div><div class="line">h_fc1 = tf.nn.relu(tf.matmul(h_pool2_flat, W_fc1) + b_fc1)</div><div class="line"></div><div class="line"><span class="comment"># dropout操作，减少过拟合，其实就是降低上一层某些输入的权重scale，甚至置为0，升高某些输入的权值，甚至置为2，防止评测曲线出现震荡，个人觉得样本较少时很必要</span></div><div class="line">keep_prob = tf.placeholder(tf.float32)</div><div class="line">h_fc1_drop = tf.nn.dropout(h_fc1, keep_prob)  <span class="comment"># 对卷积结果执行dropout操作</span></div><div class="line"></div><div class="line"><span class="comment">## 第六层输出操作 ##</span></div><div class="line"><span class="comment"># 二维张量，1*1024矩阵卷积，共2个卷积，对应我们开始的ys长度为2</span></div><div class="line">W_fc2 = weight_variable([1024, 2])</div><div class="line">b_fc2 = bias_variable([2])</div><div class="line"><span class="comment"># 最后的分类，结果为1*1*2 softmax和sigmoid都是基于logistic分类算法，一个是多分类一个是二分类</span></div><div class="line">y_conv = tf.nn.sigmoid(tf.matmul(h_fc1_drop, W_fc2) + b_fc2)</div><div class="line"></div><div class="line"><span class="comment"># 定义loss(最小误差概率)，选定优化优化loss，</span></div><div class="line"><span class="comment"># cross_entropy = -tf.reduce_sum(ys * tf.log(y_conv))  # 定义交叉熵为loss函数</span></div><div class="line">cross_entropy = tf.reduce_mean(-tf.reduce_sum(ys * tf.log(y_conv),reduction_indices=[1]))       <span class="comment"># loss</span></div><div class="line"><span class="comment"># tensorboard loss</span></div><div class="line">tf.summary.scalar(<span class="string">'loss'</span>, cross_entropy)</div><div class="line"></div><div class="line">train_step = tf.train.GradientDescentOptimizer(0.2).minimize(cross_entropy)  <span class="comment"># 调用优化器优化，其实就是通过喂数据争取cross_entropy最小化</span></div><div class="line"></div><div class="line"><span class="comment"># 五，开始数据训练以及评测</span></div><div class="line">correct_prediction = tf.equal(tf.argmax(y_conv, 1), tf.argmax(ys, 1))</div><div class="line">accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))</div><div class="line"><span class="comment"># tensorboard loss</span></div><div class="line">tf.summary.scalar(<span class="string">'accuracy'</span>, accuracy)</div><div class="line"></div><div class="line">init = tf.global_variables_initializer()</div><div class="line"></div><div class="line">imgsData, labelsData = read_img(true_path, false_path)</div><div class="line">num_example = imgsData.shape[0]</div><div class="line">ratio = 0.5</div><div class="line">s = np.int(num_example * ratio)</div><div class="line">imgs_train = imgsData[:s]</div><div class="line">labels_train = labelsData[:s]</div><div class="line">imgs_test = imgsData[s:]</div><div class="line">labels_test = labelsData[s:]</div><div class="line"></div><div class="line">with tf.Session() as sess:</div><div class="line">    sess.run(init)</div><div class="line">    merged = tf.summary.merge_all()</div><div class="line">    writer = tf.summary.FileWriter(<span class="string">"logs/"</span>, sess.graph)</div><div class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(20000):</div><div class="line">        <span class="comment"># 大乱数据，取得训练数据和测试数据</span></div><div class="line">        imgsData, labelsData = read_img(true_path, false_path)</div><div class="line">        num_example = imgsData.shape[0]</div><div class="line">        ratio = 0.5</div><div class="line">        s = np.int(num_example * ratio)</div><div class="line">        imgs_train = imgsData[:s]</div><div class="line">        labels_train = labelsData[:s]</div><div class="line"></div><div class="line">        <span class="keyword">if</span> i % 100 == 0:</div><div class="line">            train_accuracy = sess.run(accuracy, feed_dict=&#123;xs: imgs_train, ys: labels_train, keep_prob: 0.8&#125;)</div><div class="line">            <span class="built_in">print</span>(<span class="string">"step %d, training accuracy %g"</span> % (i, train_accuracy))</div><div class="line">            sess.run(train_step,feed_dict=&#123;xs: imgs_train, ys: labels_train, keep_prob: 0.5&#125;)</div><div class="line">            summary = sess.run(merged,feed_dict=&#123;xs: imgs_train, ys: labels_train, keep_prob: 0.5&#125;)</div><div class="line">            writer.add_summary(summary, i)</div><div class="line">    <span class="built_in">print</span>(<span class="string">"test accuracy %g"</span> % sess.run(accuracy,feed_dict=&#123;xs: imgs_test, ys: labels_test, keep_prob: 1.0&#125;))</div></pre></td></tr></table></figure><p></p>
+<p></p><h2><br>——  step.4 声明<br></h2><br>　　　部分图片和内容来自于网络，若有纠纷麻烦联系邮箱：lc438732659@163.com<p></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">机器学习</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">CNN</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/10/27/机器学习基础之CNN/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
     <article id="post-阿里云栖大会行记" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -226,87 +325,6 @@
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2017/10/17/阿里云栖大会行记/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
-    <article id="post-vue学习" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/07/28/vue学习/">vue学习</a>
-    </h1>
-  
-
-        
-        <a href="/2017/07/28/vue学习/" class="archive-article-date">
-  	<time datetime="2017-07-28T10:06:16.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-07-28</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-
-            <div class="article-moreinfo">
-                <div class="lastModifiedDate">
-                    <span>最后更新：</span>
-                    <time datetime="2017-10-17T15:50:00.631Z" itemprop="dateLastModified">
-                    2017-10-17
-                    </time>
-                </div>
-                <div class="copyright">
-                    <span>许可协议：</span>
-                    <a rel="license" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议</a>
-                </div>
-            </div>
-
-        <h2 id="vue学习"><a href="#vue学习" class="headerlink" title="vue学习"></a>vue学习</h2><p>1.vue组件化，组件内外通讯<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//首先,vue外层给组件内层传参</span></div><div class="line"><span class="comment">//外层代码</span></div><div class="line">&lt;comm :width=<span class="string">"300"</span> :height=<span class="string">"300"</span> url=<span class="string">"https://asd.org/post"</span> @close=<span class="string">'close'</span>&gt;&lt;/comm&gt;</div><div class="line"><span class="comment">//模块内代码，主要接收外层参数，内层直接用</span></div><div class="line"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</div><div class="line">        <span class="attr">props</span>: &#123;</div><div class="line">            <span class="comment">//携带几个参数加几个</span></div><div class="line">            url: &#123;</div><div class="line">                <span class="attr">type</span>: <span class="built_in">String</span>,</div><div class="line">                <span class="attr">default</span>: <span class="string">''</span></div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">//再者，vue内层给外层通讯</span></div><div class="line"><span class="comment">//外层代码</span></div><div class="line">&lt;comm url=<span class="string">"https://asd.org/post"</span> @success=<span class="string">"Success"</span> @close=<span class="string">'close'</span>&gt;&lt;/comm&gt;</div><div class="line"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</div><div class="line">    <span class="attr">components</span>: &#123; comm &#125;, <span class="comment">//引入组件名</span></div><div class="line">    data() &#123;</div><div class="line">    &#125;,</div><div class="line">    <span class="attr">methods</span>: &#123;</div><div class="line">      Success(resData) &#123;</div><div class="line"></div><div class="line">      &#125;,</div><div class="line">      close() &#123;</div><div class="line">      </div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"><span class="comment">//内层代码</span></div><div class="line"><span class="keyword">this</span>.$emit(<span class="string">'Success'</span>, resData.data);</div><div class="line"><span class="keyword">this</span>.$emit(<span class="string">'close'</span>, resData.data);</div></pre></td></tr></table></figure></p>
-<p>—待补充—</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">前端</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">vue</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/07/28/vue学习/">展开全文 >></a>
         </p>
       
 
@@ -435,11 +453,15 @@
           <ul class="article-tag-list" q-show="showTags">
             
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">机器学习</a>
+                <a href="javascript:void(0)" class="js-tag color3">mongodb</a>
               </li>
             
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">caffe</a>
+                <a href="javascript:void(0)" class="js-tag color5">java</a>
+              </li>
+            
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">java基础函数整理</a>
               </li>
             
               <li class="article-tag-list-item">
@@ -459,23 +481,19 @@
               </li>
             
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">java</a>
+                <a href="javascript:void(0)" class="js-tag color5">机器学习</a>
               </li>
             
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">java基础函数整理</a>
+                <a href="javascript:void(0)" class="js-tag color1">caffe</a>
               </li>
             
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">mongodb</a>
+                <a href="javascript:void(0)" class="js-tag color1">ejs更改</a>
               </li>
             
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">前端</a>
-              </li>
-            
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">vue</a>
+                <a href="javascript:void(0)" class="js-tag color4">添加友情链接头像</a>
               </li>
             
               <li class="article-tag-list-item">
@@ -487,27 +505,15 @@
               </li>
             
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">前端</a>
+              </li>
+            
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">vue</a>
+              </li>
+            
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">node.js</a>
-              </li>
-            
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">gulp，webpack，brower</a>
-              </li>
-            
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">koa</a>
-              </li>
-            
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">angular</a>
-              </li>
-            
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">ejs更改</a>
-              </li>
-            
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">添加友情链接头像</a>
               </li>
             
               <li class="article-tag-list-item">
@@ -523,11 +529,23 @@
               </li>
             
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">配置hexo</a>
+                <a href="javascript:void(0)" class="js-tag color3">目标检测SSD</a>
               </li>
             
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">目标检测SSD</a>
+                <a href="javascript:void(0)" class="js-tag color5">gulp，webpack，brower</a>
+              </li>
+            
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">koa</a>
+              </li>
+            
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">angular</a>
+              </li>
+            
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">CNN</a>
               </li>
             
               <li class="article-tag-list-item">
@@ -543,7 +561,7 @@
               </li>
             
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">CNN</a>
+                <a href="javascript:void(0)" class="js-tag color2">配置hexo</a>
               </li>
             
             <div class="clearfix"></div>
