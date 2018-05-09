@@ -6,12 +6,12 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="https://pizerliu.github.io">
-  <title>木双鱼小站</title>
+  <title>Archives: 2018 | 木双鱼小站</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="上海大学研究生，就职于900etrip。非专业视觉设计师。此为博客一枚。">
 <meta property="og:type" content="website">
 <meta property="og:title" content="木双鱼小站">
-<meta property="og:url" content="https://pizerliu.github.io/page/2/index.html">
+<meta property="og:url" content="https://pizerliu.github.io/archives/2018/page/3/index.html">
 <meta property="og:site_name" content="木双鱼小站">
 <meta property="og:description" content="上海大学研究生，就职于900etrip。非专业视觉设计师。此为博客一枚。">
 <meta name="twitter:card" content="summary">
@@ -151,141 +151,34 @@
           <div id="js-content" class="content-ll">
             
   
-    <article id="post-mongodb主从配置" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
+  
     
-      <header class="article-header">
-        
+    
+      
+      
+      <section class="archives-wrap">
+        <div class="archive-year-wrap">
+          <a href="/archives/2018" class="archive-year">2018</a>
+        </div>
+        <div class="archives">
+    
+    <article class="archive-article archive-type-post">
+  <div class="archive-article-inner">
+    <header class="archive-article-header">
+      	<div class="article-meta">
+	      	<a href="/2018/01/31/caffe环境配置/" class="archive-article-date">
+  	<time datetime="2018-01-31T04:36:31.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-01-31</time>
+</a>
+        </div>
+    	 
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2018/04/29/mongodb主从配置/">mongodb主从配置</a>
+      <a class="archive-article-title" href="/2018/01/31/caffe环境配置/">caffe环境配置</a>
     </h1>
   
 
-        
-        <a href="/2018/04/29/mongodb主从配置/" class="archive-article-date">
-  	<time datetime="2018-04-29T05:23:01.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-04-29</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-
-            <div class="article-moreinfo">
-                <div class="lastModifiedDate">
-                    <span>最后更新：</span>
-                    <time datetime="2018-04-29T10:03:02.698Z" itemprop="dateLastModified">
-                    2018-04-29
-                    </time>
-                </div>
-                <div class="copyright">
-                    <span>许可协议：</span>
-                    <a rel="license" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议</a>
-                </div>
-            </div>
-
-        <p>　　　本教程采用docker-compose搭建，在一台机器上搭建mongodb主从配置。主机负责插入更新数据，从机负责查询数据。<br>　　　首先是机器目录结构：<br>　　　<img src="http://image.51move.cn/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20180429173959.png" alt="此处输入图片的描述"><br>　　　<br>　　　该目录下所有文件权限最好设置chmod 777，注意keyfileDir内的keyfile要设置chmod 600.(keyfile后面讲是什么)<br>　　　data_master为主机mongodb存放数据目录，data_salve_1为从机1的mongodb存放数据目录，data_salve_2为从机2的mongodb存放数据目录.mongodb_master_log,mongodb_slave_1_log,mongodb_slave_2_log,为各主从机的log存放位置。mongodb_MS.yml（有两个不一样的，下面仔细看）为docker-compose搭建各容器的文件。keyfileDir内有一文件keyfile，主要是用来主从机握手的key文件，在linux系统中，生成代码为：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">openssl rand -base64 741 &gt;&gt; keyfile</div></pre></td></tr></table></figure></p>
-<p>　　首先要建立没有登陆权限的mongodb主从，执行以下版本一mongodb_MS.yml代码，docker-compose -f mongodb_MS.yml up -d （注意把–source里的ip改成自己机器的ip）：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div></pre></td><td class="code"><pre><div class="line">version: <span class="string">"2.1"</span></div><div class="line">networks:</div><div class="line">  default:</div><div class="line">    external:</div><div class="line">      name: pizer_local_network</div><div class="line">services:</div><div class="line">  pizer_env_mongodb_master:</div><div class="line">    image: <span class="string">'docker.io/mongo:3.6-rc'</span></div><div class="line">    container_name: pizer_env_mongodb_master</div><div class="line">    hostname: pizer_env_mongodb_master</div><div class="line">    ports:</div><div class="line">      - 27008:27017</div><div class="line">    volumes:</div><div class="line">      - /root/top/mongodb_MS_docker/mongodb_master_log:/usr/mongodb_logs</div><div class="line">      - /root/top/mongodb_MS_docker/data_master:/usr/mongodb_data</div><div class="line">      - /root/top/mongodb_MS_docker/keyfileDir:/usr/mongodb_key</div><div class="line">    <span class="built_in">command</span>:</div><div class="line">      [<span class="string">'--master'</span>,<span class="string">'--bind_ip_all'</span>,<span class="string">'--dbpath=/usr/mongodb_data'</span>,<span class="string">'--logpath=/usr/mongodb_logs/mongodb_master.log'</span>]</div><div class="line">  pizer_env_mongodb_slave_1:</div><div class="line">    image: <span class="string">'docker.io/mongo:3.6-rc'</span></div><div class="line">    container_name: pizer_env_mongodb_slave_1</div><div class="line">    hostname: pizer_env_mongodb_slave_1</div><div class="line">    ports:</div><div class="line">      - 27009:27017</div><div class="line">    volumes:</div><div class="line">      - /root/top/mongodb_MS_docker/mongodb_slave_1_log:/usr/mongodb_logs</div><div class="line">      - /root/top/mongodb_MS_docker/data_slave_1:/usr/mongodb_data</div><div class="line">      - /root/top/mongodb_MS_docker/keyfileDir:/usr/mongodb_key</div><div class="line">    depends_on:</div><div class="line">      - <span class="string">"pizer_env_mongodb_master"</span></div><div class="line">    <span class="built_in">command</span>:</div><div class="line">      [<span class="string">'--slave'</span>,<span class="string">'--source=47.100.22.11:27008'</span>,<span class="string">'--bind_ip_all'</span>,<span class="string">'--dbpath=/usr/mongodb_data'</span>,<span class="string">'--logpath=/usr/mongodb_logs/mongodb_slave_1.log'</span>]</div><div class="line">  pizer_env_mongodb_slave_2:</div><div class="line">    image: <span class="string">'docker.io/mongo:3.6-rc'</span></div><div class="line">    container_name: pizer_env_mongodb_slave_2</div><div class="line">    hostname: pizer_env_mongodb_slave_2</div><div class="line">    ports:</div><div class="line">      - 27010:27017</div><div class="line">    volumes:</div><div class="line">      - /root/top/mongodb_MS_docker/mongodb_slave_2_log:/usr/mongodb_logs</div><div class="line">      - /root/top/mongodb_MS_docker/data_slave_2:/usr/mongodb_data</div><div class="line">      - /root/top/mongodb_MS_docker/keyfileDir:/usr/mongodb_key</div><div class="line">    depends_on:</div><div class="line">      - <span class="string">"pizer_env_mongodb_master"</span></div><div class="line">    <span class="built_in">command</span>:</div><div class="line">      [<span class="string">'--slave'</span>,<span class="string">'--source=47.100.22.11:27008'</span>,<span class="string">'--bind_ip_all'</span>,<span class="string">'--dbpath=/usr/mongodb_data'</span>,<span class="string">'--logpath=/usr/mongodb_logs/mongodb_slave_2.log'</span>]</div></pre></td></tr></table></figure></p>
-<p>　　　此时，mongodb主从是没有登陆账户限制的，这是极不安全的，接下来我们需要设置登陆账户。 我们进入数据库master容器，在位置/usr/bin/处执行mongo,执行下面操作：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">use admin</div><div class="line"><span class="comment">#创建root用户</span></div><div class="line">db.createUser(</div><div class="line">  &#123;</div><div class="line">    user: <span class="string">"root"</span>,</div><div class="line">    <span class="built_in">pwd</span>: <span class="string">"zxc`12`12"</span>,</div><div class="line">    roles: [ &#123; role: <span class="string">"root"</span>, db: <span class="string">"admin"</span> &#125; ]</div><div class="line">  &#125;</div><div class="line">)</div><div class="line"><span class="comment">#验证权限</span></div><div class="line">use admin</div><div class="line">db.auth(<span class="string">'root'</span>,<span class="string">'zxc`12`12'</span>)</div><div class="line"><span class="comment">#创建登陆用户（允许读写）</span></div><div class="line">use <span class="built_in">test</span></div><div class="line">db.createUser(</div><div class="line">  &#123;</div><div class="line">    user: <span class="string">"pizer"</span>,</div><div class="line">    <span class="built_in">pwd</span>: <span class="string">"zxc`12`12"</span>,</div><div class="line">    roles: [ &#123; role: <span class="string">"readWrite"</span>, db: <span class="string">"test"</span> &#125; ]</div><div class="line">  &#125;</div><div class="line">)</div></pre></td></tr></table></figure></p>
-<p>　　　登陆用户创建完毕，接下来设置数据库auth，然后重启，依然执行以下版本二mongodb_MS.yml代码，docker-compose -f mongodb_MS.yml up -d （注意把–source里的ip改成自己机器的ip）：<br>　　　<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div></pre></td><td class="code"><pre><div class="line">version: <span class="string">"2.1"</span></div><div class="line">networks:</div><div class="line">  default:</div><div class="line">    external:</div><div class="line">      name: pizer_local_network</div><div class="line">services:</div><div class="line">  pizer_env_mongodb_master:</div><div class="line">    image: <span class="string">'docker.io/mongo:3.6-rc'</span></div><div class="line">    container_name: pizer_env_mongodb_master</div><div class="line">    hostname: pizer_env_mongodb_master</div><div class="line">    ports:</div><div class="line">      - 27008:27017</div><div class="line">    volumes:</div><div class="line">      - /root/top/mongodb_MS_docker/mongodb_master_log:/usr/mongodb_logs</div><div class="line">      - /root/top/mongodb_MS_docker/data_master:/usr/mongodb_data</div><div class="line">      - /root/top/mongodb_MS_docker/keyfileDir:/usr/mongodb_key</div><div class="line">    <span class="built_in">command</span>:</div><div class="line">      [<span class="string">'--master'</span>,<span class="string">'--bind_ip_all'</span>,<span class="string">'--dbpath=/usr/mongodb_data'</span>,<span class="string">'--logpath=/usr/mongodb_logs/mongodb_master.log'</span>,<span class="string">'--auth'</span>,<span class="string">'--keyFile=/usr/mongodb_key/keyfile'</span>]</div><div class="line">  pizer_env_mongodb_slave_1:</div><div class="line">    image: <span class="string">'docker.io/mongo:3.6-rc'</span></div><div class="line">    container_name: pizer_env_mongodb_slave_1</div><div class="line">    hostname: pizer_env_mongodb_slave_1</div><div class="line">    ports:</div><div class="line">      - 27009:27017</div><div class="line">    volumes:</div><div class="line">      - /root/top/mongodb_MS_docker/mongodb_slave_1_log:/usr/mongodb_logs</div><div class="line">      - /root/top/mongodb_MS_docker/data_slave_1:/usr/mongodb_data</div><div class="line">      - /root/top/mongodb_MS_docker/keyfileDir:/usr/mongodb_key</div><div class="line">    depends_on:</div><div class="line">      - <span class="string">"pizer_env_mongodb_master"</span></div><div class="line">    <span class="built_in">command</span>:</div><div class="line">      [<span class="string">'--slave'</span>,<span class="string">'--source=47.100.22.11:27008'</span>,<span class="string">'--bind_ip_all'</span>,<span class="string">'--dbpath=/usr/mongodb_data'</span>,<span class="string">'--logpath=/usr/mongodb_logs/mongodb_slave_1.log'</span>,<span class="string">'--auth'</span>,<span class="string">'--keyFile=/usr/mongodb_key/keyfile'</span>]</div><div class="line">  pizer_env_mongodb_slave_2:</div><div class="line">    image: <span class="string">'docker.io/mongo:3.6-rc'</span></div><div class="line">    container_name: pizer_env_mongodb_slave_2</div><div class="line">    hostname: pizer_env_mongodb_slave_2</div><div class="line">    ports:</div><div class="line">      - 27010:27017</div><div class="line">    volumes:</div><div class="line">      - /root/top/mongodb_MS_docker/mongodb_slave_2_log:/usr/mongodb_logs</div><div class="line">      - /root/top/mongodb_MS_docker/data_slave_2:/usr/mongodb_data</div><div class="line">      - /root/top/mongodb_MS_docker/keyfileDir:/usr/mongodb_key</div><div class="line">    depends_on:</div><div class="line">      - <span class="string">"pizer_env_mongodb_master"</span></div><div class="line">    <span class="built_in">command</span>:</div><div class="line">      [<span class="string">'--slave'</span>,<span class="string">'--source=47.100.22.11:27008'</span>,<span class="string">'--bind_ip_all'</span>,<span class="string">'--dbpath=/usr/mongodb_data'</span>,<span class="string">'--logpath=/usr/mongodb_logs/mongodb_slave_2.log'</span>,<span class="string">'--auth'</span>,<span class="string">'--keyFile=/usr/mongodb_key/keyfile'</span>]</div></pre></td></tr></table></figure></p>
-<p>　　　</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">mongodb</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/04/29/mongodb主从配置/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
-    <article id="post-目标检测SSD" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/03/07/目标检测SSD/">目标检测SSD</a>
-    </h1>
-  
-
-        
-        <a href="/2018/03/07/目标检测SSD/" class="archive-article-date">
-  	<time datetime="2018-03-07T07:21:21.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-03-07</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-
-            <div class="article-moreinfo">
-                <div class="lastModifiedDate">
-                    <span>最后更新：</span>
-                    <time datetime="2018-04-29T09:35:47.347Z" itemprop="dateLastModified">
-                    2018-04-29
-                    </time>
-                </div>
-                <div class="copyright">
-                    <span>许可协议：</span>
-                    <a rel="license" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议</a>
-                </div>
-            </div>
-
-        <p>　　　目标检测域内，传统一点的框架会在feature map（或者原图）上进行region proposal提取出可能有物体的部分然后进行分类，这一步可能非常费时，所以SSD就放弃了region proposal，而选择直接生成一系列defaul box（或者叫prior box），然后将这些default box回归到正确的位置上去，整个过程通过网络的一次前向传播就可以完成，非常方便。<br>　　　SSD 是基于一个前向传播 CNN 网络，产生一系列 固定大小（fixed-size） 的 bounding boxes，以及每一个 box 中包含物体实例的可能性，即 score。之后，进行一个 非极大值抑制（Non-maximum suppression） 得到最终的 predictions。SSD算是YOLO的多尺度版本，由于YOLO对小目标检测效果不好，所以SSD在不同的feature map上分割成grid然后采用类似RPN的方式做回归。<br>　　　SSD在基础网络结构后，添加了额外的卷积层（没有用全链接层），使得这些卷积层的大小是逐层递减的，所以可以在多尺度下进行 predictions。
-　　　</p>
-<ul>
-<li>feature map cell 就是将 feature map 切分成 8×8 或者 4×4 之后的一个个的格子；</li>
-<li>default box 就是每一个格子上，一系列固定大小的 box，即图中虚线所形成的一系列 boxes。</li>
-</ul>
-<p><img src="http://image.51move.cn/blog/20160918092529925" alt="此处输入图片的描述"> </p>
-<p>　　　每一个 box 相对于与其对应的 feature map cell 的位置是固定的。 在每一个 feature map cell 中，我们要 predict 得到的 box 与 default box 之间的 offsets，以及每一个 box 中包含物体的 score（每一个类别概率都要计算出）。 因此，对于一个位置上的 kk 个boxes 中的每一个 box，我们需要计算出 cc 个类，每一个类的 score，还有这个 box 相对于 它的默认 box 的 4 个偏移值（offsets）。于是，在 feature map 中的每一个 feature map cell 上，就需要有 (c+4)×k(c+4)×k 个 filters。对于一张 m×nm×n 大小的 feature map，即会产生 (c+4)×k×m×n(c+4)×k×m×n 个输出结果。<br>　　　<br><img src="http://image.51move.cn/blog/20160918092701558" alt="此处输入图片的描述"></p>
-<p>　　　在生成一系列的 predictions 之后，会产生很多个符合 ground truth box 的 predictions boxes，但同时，不符合 ground truth boxes 也很多，而且这个 negative boxes，远多于 positive boxes。这会造成 negative boxes、positive boxes 之间的不均衡。训练时难以收敛。</p>
-<p>因此，本文采取，先将每一个物体位置上对应 predictions（default boxes）是 negative 的 boxes 进行排序，按照 default boxes 的 confidence 的大小。 选择最高的几个，保证最后 negatives、positives 的比例在 3:1，这样的比例可以更快的优化，训练也更稳定。</p>
-<p>　　　源码里使用pycaffe定义网络：<a href="http://blog.csdn.net/u011762313/article/details/48213421" target="_blank" rel="external">http://blog.csdn.net/u011762313/article/details/48213421</a></p>
-<p>　　　<br>　<br>　　　本文摘自互联网，是方便自己再次查阅回顾。若有侵权问题可联系邮箱lc438732659@163.com。    
-　　　</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
+        <div class="article-info info-on-right">
+          
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
@@ -295,37 +188,27 @@
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">目标检测SSD</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">caffe</a>
         		</li>
       		
 		</ul>
 	</div>
 
-      
+          
 
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/03/07/目标检测SSD/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
+        </div>
+        <div class="clearfix"></div>
+    </header>
   </div>
 </article>
-
-
-
-
-
-
-
-
   
   
+    </div></section>
+  
+
+    
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><a class="extend next" rel="next" href="/page/3/">Next &raquo;</a>
+      <a class="extend prev" rel="prev" href="/archives/2018/page/2/">&laquo; Prev</a><a class="page-number" href="/archives/2018/">1</a><a class="page-number" href="/archives/2018/page/2/">2</a><span class="page-number current">3</span>
     </nav>
   
 
@@ -363,9 +246,9 @@
     <script>
 	var yiliaConfig = {
 		mathjax: false,
-		isHome: true,
+		isHome: false,
 		isPost: false,
-		isArchive: false,
+		isArchive: true,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,

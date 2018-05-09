@@ -151,6 +151,92 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-小站接入友情链接头像" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/03/23/小站接入友情链接头像/">小站接入友情链接头像</a>
+    </h1>
+  
+
+        
+        <a href="/2017/03/23/小站接入友情链接头像/" class="archive-article-date">
+  	<time datetime="2017-03-23T08:54:29.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-03-23</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+
+            <div class="article-moreinfo">
+                <div class="lastModifiedDate">
+                    <span>最后更新：</span>
+                    <time datetime="2017-04-02T12:19:55.734Z" itemprop="dateLastModified">
+                    2017-04-02
+                    </time>
+                </div>
+                <div class="copyright">
+                    <span>许可协议：</span>
+                    <a rel="license" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议</a>
+                </div>
+            </div>
+
+        <p></p><h2><br>ejs这小家伙不好用呀<br></h2><br>　　前天在思考给木双鱼小站加些什么功能那，偶然在litten作者github的issue板块发现有人提出了友情链接图标的添加，网上看了下没有发现有网友添加这个功能，yilia主题的友情链接只有一个名字看着的确干巴巴的，决定自己来搞定这块.<br>　　基本想法比较简单，后面再进行拓展，有了友情链接的url，一般正规网站都会采用url/favicon.ico的方式存放图标，假如图标链接无效的话，采用备用头像。<br>　　最开始没有想到直接用img标签解决，而是想改写ejs代码实现，但是经过两天的挣扎，实现功能就卡在一步上（js参数传递给ejs参数），搞了两天没有解决这个问题，最后决定放弃这种方法，采用img标签的方法解决。不过还是介绍下自己学习ejs的学习。<br>　　友情链接这块的 ejs 在 themes\hexo-theme-yilia-master\layout\tools.ejs。<br>　　ejs的大致语法为：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">模板逻辑代码</div><div class="line">&lt;% code %&gt;</div><div class="line">输出变量值</div><div class="line">&lt;%= code %&gt;</div><div class="line">不做转义的输出变量值</div><div class="line">&lt;%- code %&gt;</div><div class="line"></div><div class="line">满足 <span class="keyword">if</span> <span class="keyword">else</span>、<span class="keyword">for</span> <span class="keyword">in</span>、foreach、对象数组的基本用法如push等 语法,ejs变量可以赋值给js变量，但是js变量没办法赋值给ejs变量。（ps:搞了两天没解决，如果我搞错了，希望大神指导）</div></pre></td></tr></table></figure><p></p>
+<p>　　最终采用img标签方式解决了问题，基本方法如下：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#在tools.ejs文件里找到以下代码：</span></div><div class="line">&lt;% <span class="keyword">for</span> (var i <span class="keyword">in</span> theme.friends)&#123; %&gt;    </div><div class="line">    &lt;li class=<span class="string">"search-li"</span>&gt;</div><div class="line">        &lt;a href=<span class="string">"&lt;%- url_for(theme.friends[i]) %&gt;"</span> target=<span class="string">"_blank"</span> style=<span class="string">"color:#969696"</span> class=<span class="string">"search-title"</span>&gt;&lt;i class=<span class="string">"icon"</span>&gt;&lt;/i&gt;</div><div class="line">        &lt;%<span class="keyword">if</span>( url_for(theme.friends[i]) )&#123;%&gt;</div><div class="line">            &lt;%= i %&gt;&lt;/a&gt;</div><div class="line">        &lt;% &#125; %&gt;</div><div class="line">    &lt;/li&gt;</div><div class="line">&lt;% &#125; %&gt;</div><div class="line"></div><div class="line"><span class="comment">#将&lt;%= i %&gt;前面加上以下代码：</span></div><div class="line">&lt;img class=<span class="string">"imgUrl"</span> src=<span class="string">"&lt;%=  url_for(theme.friends[i]) + 'favicon.ico' %&gt;"</span>  alt=<span class="string">"icon"</span> height=<span class="string">"40"</span> width=<span class="string">"40"</span>  /&gt;&amp;nbsp&amp;nbsp&amp;nbsp</div><div class="line"></div><div class="line"><span class="comment">#将tools.ejs文件尾部加上以下代码：</span></div><div class="line">&lt;script <span class="built_in">type</span>=<span class="string">"text/javascript"</span>&gt;</div><div class="line">  t = document.getElementsByClassName(<span class="string">"imgUrl"</span>);</div><div class="line">  <span class="keyword">for</span>(i = 0; i &lt; t.length; i++)&#123;</div><div class="line">      t.item(i).onerror = <span class="function"><span class="title">function</span></span>()&#123;</div><div class="line">        this.src = <span class="string">"https://pizerliu.github.io/earth.png"</span></div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">&lt;/script&gt;</div></pre></td></tr></table></figure></p>
+<p>　　最终，实现了友情链接的头像添加。</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">hexo</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">ejs更改</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">添加友情链接头像</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/03/23/小站接入友情链接头像/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
     <article id="post-hexo主题功能的注入" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -251,107 +337,9 @@
 
 
   
-    <article id="post-木双鱼小站建立" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/03/20/木双鱼小站建立/">2017/3/20 木双鱼小站建立</a>
-    </h1>
-  
-
-        
-        <a href="/2017/03/20/木双鱼小站建立/" class="archive-article-date">
-  	<time datetime="2017-03-20T01:25:20.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-03-20</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-
-            <div class="article-moreinfo">
-                <div class="lastModifiedDate">
-                    <span>最后更新：</span>
-                    <time datetime="2017-04-02T12:19:19.013Z" itemprop="dateLastModified">
-                    2017-04-02
-                    </time>
-                </div>
-                <div class="copyright">
-                    <span>许可协议：</span>
-                    <a rel="license" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议</a>
-                </div>
-            </div>
-
-        <h2 id="惺惺松松"><a href="#惺惺松松" class="headerlink" title="惺惺松松"></a>惺惺松松</h2><p>　　　近日学习工作之余，突然有建立一个自己博客的想法，既可以记录下自己平时学习的过程，也可以平复自己这颗浮躁的心，记录下自己生活的点点滴滴也是很有意义的。<br>　　　通过查看，发现了<a href="https://hexo.io/zh-cn/docs/" target="_blank" rel="external">hexo</a>,它是一个快速、简洁且高效的博客框架，可以帮助我快速搭建博客。通过查看，发现它的默认主题并不是我的菜，于是继续去google寻找我的最爱。通过翻阅发现了<a href="https://github.com/litten/hexo-theme-yilia" target="_blank" rel="external">yilia主题</a>，茫茫人海中看到了最爱的感觉，yilia简洁大方，重点突出，它就这么容易的get到我了。</p>
-<h2 id="搭建过程"><a href="#搭建过程" class="headerlink" title="搭建过程"></a>搭建过程</h2><ol>
-<li><p>安装node和git（google一抓一大把，就不细说啦，在git上要建立一个项目，github提供了一个免费空间，具体搭建请google）<br></p>
-</li>
-<li><p>下载<a href="https://github.com/litten/hexo-theme-yilia" target="_blank" rel="external">yilia主题包</a></p>
-</li>
-<li>安装hexo</li>
-</ol>
-<p>代码如下操作：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">npm install -g hexo-cli</div></pre></td></tr></table></figure></p>
-<p>主要操作命令如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">hexo init [项目名字]</div><div class="line">#编译</div><div class="line">hexo g</div><div class="line">#本地运行</div><div class="line">hexo s</div><div class="line">#根据配置上传到git</div><div class="line">hexo d</div></pre></td></tr></table></figure></p>
-<p>hexo d 命令需要先配置hexo根目录下的_config.yml文件(重点：hexo根目录)</p>
-<pre><code>theme: hexo-theme-yilia-master  #这里要填写你的主题名字，也就是文件夹名字
-
-deploy:
-  type: git
-  repository: [这里填写你的git项目]
-  branch: master
-</code></pre><p>具体使用查看<a href="https://hexo.io/zh-cn/docs/" target="_blank" rel="external">hexo</a>文档</p>
-<p> 4.配置个人信息<br>    切记个人头像和ico的配置都是在yilia主题根目录下的_config.yml文件(重点：yilia主题根目录)，具体配置查看作者<a href="https://github.com/litten/BlogBackup" target="_blank" rel="external">litten介绍</a></p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">hexo</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">配置hexo</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/03/20/木双鱼小站建立/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
   
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/page/6/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><span class="page-number current">7</span>
+      <a class="extend prev" rel="prev" href="/page/6/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><span class="page-number current">7</span><a class="page-number" href="/page/8/">8</a><a class="extend next" rel="next" href="/page/8/">Next &raquo;</a>
     </nav>
   
 
@@ -468,10 +456,6 @@ deploy:
               </li>
             
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">java基础函数整理</a>
-              </li>
-            
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">hexo</a>
               </li>
             
@@ -485,6 +469,26 @@ deploy:
             
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">知识许可协议</a>
+              </li>
+            
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">java基础函数整理</a>
+              </li>
+            
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">node.js</a>
+              </li>
+            
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">gulp，webpack，brower</a>
+              </li>
+            
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">koa</a>
+              </li>
+            
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">angular</a>
               </li>
             
               <li class="article-tag-list-item">
@@ -504,23 +508,11 @@ deploy:
               </li>
             
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">国足大宝</a>
-              </li>
-            
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">应用于yilia的背景特效,改进的背景特效</a>
-              </li>
-            
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">前端</a>
               </li>
             
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">vue</a>
-              </li>
-            
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">node.js</a>
               </li>
             
               <li class="article-tag-list-item">
@@ -536,23 +528,15 @@ deploy:
               </li>
             
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">目标检测SSD</a>
+                <a href="javascript:void(0)" class="js-tag color5">国足大宝</a>
               </li>
             
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">gulp，webpack，brower</a>
+                <a href="javascript:void(0)" class="js-tag color2">应用于yilia的背景特效,改进的背景特效</a>
               </li>
             
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">koa</a>
-              </li>
-            
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">angular</a>
-              </li>
-            
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">CNN</a>
+                <a href="javascript:void(0)" class="js-tag color2">配置hexo</a>
               </li>
             
               <li class="article-tag-list-item">
@@ -568,7 +552,11 @@ deploy:
               </li>
             
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">配置hexo</a>
+                <a href="javascript:void(0)" class="js-tag color4">CNN</a>
+              </li>
+            
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">目标检测SSD</a>
               </li>
             
             <div class="clearfix"></div>

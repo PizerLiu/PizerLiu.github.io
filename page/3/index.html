@@ -151,6 +151,88 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-caffe环境配置" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/01/31/caffe环境配置/">caffe环境配置</a>
+    </h1>
+  
+
+        
+        <a href="/2018/01/31/caffe环境配置/" class="archive-article-date">
+  	<time datetime="2018-01-31T04:36:31.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-01-31</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+
+            <div class="article-moreinfo">
+                <div class="lastModifiedDate">
+                    <span>最后更新：</span>
+                    <time datetime="2018-01-31T09:42:53.267Z" itemprop="dateLastModified">
+                    2018-01-31
+                    </time>
+                </div>
+                <div class="copyright">
+                    <span>许可协议：</span>
+                    <a rel="license" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议</a>
+                </div>
+            </div>
+
+        <p>　　　本来是打算直接windows系统用docker的caffe环境，怎奈docker技术吃得不够透彻，在调取摄像头资源的时候，docker容器调取不到本机摄像头资源，没办法，只能回归老办法，再装ubuntu系双统配置caffe环境，配置过程中也是万分纠结，因为之前没有直接配置过caffe（都是偷懒用的docker，咳咳），接下在首先总结一下我的caffe安装。<br>　　　最开始第一反应是去搜索ubuntu怎么安装caffe，嘟嘟出来一大堆，然后一个个的试，发现不是出这个问题，就是出那个问题，折腾了两天（相信不少第一次装得孩子们都遇到这种草蛋的事情）。后来在看caffe项目的时候，突然想起来人家给的有dockerfile，按着dockerfile来装必定没问题啊，然后就按照dockerfile来安装，步骤如下：<br>　　　<br>零. 安装cuda，opencv就不做过多说明。<br>一. 下载caffe代码,在caffe目录下写一个shell脚本，用来安装caffe所需要的依赖，有些包国内下载可能会不通畅，建议翻墙或者用别的源进行尝试，文件命名为install.sh，内容如下：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">apt-get update &amp;&amp; apt-get install -y --no-install-recommends \</div><div class="line">        build-essential \</div><div class="line">        cmake \</div><div class="line">        git \</div><div class="line">        wget \</div><div class="line">        libatlas-base-dev \</div><div class="line">        libboost-all-dev \</div><div class="line">        libgflags-dev \</div><div class="line">        libgoogle-glog-dev \</div><div class="line">        libhdf5-serial-dev \</div><div class="line">        libleveldb-dev \</div><div class="line">        liblmdb-dev \</div><div class="line">        libopencv-dev \</div><div class="line">        libprotobuf-dev \</div><div class="line">        libsnappy-dev \</div><div class="line">        protobuf-compiler \</div><div class="line">        python-dev \</div><div class="line">        python-numpy \</div><div class="line">        python-pip \</div><div class="line">        python-scipy &amp;&amp; \</div><div class="line"></div><div class="line"></div><div class="line"><span class="keyword">for</span> req <span class="keyword">in</span> $(cat python/requirements.txt) pydot; <span class="keyword">do</span> pip install <span class="variable">$req</span>; <span class="keyword">done</span></div></pre></td></tr></table></figure></p>
+<p>二. caffe编译安装<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">mkdir build &amp;&amp; <span class="built_in">cd</span> build &amp;&amp; \</div><div class="line">cmake .. &amp;&amp; \</div><div class="line">make -j8</div></pre></td></tr></table></figure></p>
+<p>三. 环境变量的配置（ sudo gedit /etc/profile ，修改完毕重启电脑即可）<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">export</span> CAFFE_ROOT=/home/pizer/workspace/caffe  (设置你自己的caffe目录)</div><div class="line"><span class="built_in">export</span> PYCAFFE_ROOT=<span class="variable">$CAFFE_ROOT</span>/python</div><div class="line"><span class="built_in">export</span> PYTHONPATH=<span class="variable">$PYCAFFE_ROOT</span>:<span class="variable">$PYTHONPATH</span></div><div class="line"><span class="built_in">export</span> PATH=/usr/<span class="built_in">local</span>/cuda/bin:<span class="variable">$CAFFE_ROOT</span>/build/tools:<span class="variable">$PYCAFFE_ROOT</span>:<span class="variable">$PATH</span>  （环境变量放入<span class="variable">$PATH</span>内）</div></pre></td></tr></table></figure></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">机器学习</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">caffe</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/01/31/caffe环境配置/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
     <article id="post-机器学习基础之CNN" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -250,101 +332,9 @@
 
 
   
-    <article id="post-阿里云栖大会行记" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/10/17/阿里云栖大会行记/">阿里云栖大会行记</a>
-    </h1>
-  
-
-        
-        <a href="/2017/10/17/阿里云栖大会行记/" class="archive-article-date">
-  	<time datetime="2017-10-17T12:39:20.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-10-17</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-
-            <div class="article-moreinfo">
-                <div class="lastModifiedDate">
-                    <span>最后更新：</span>
-                    <time datetime="2017-10-18T08:37:22.579Z" itemprop="dateLastModified">
-                    2017-10-18
-                    </time>
-                </div>
-                <div class="copyright">
-                    <span>许可协议：</span>
-                    <a rel="license" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议</a>
-                </div>
-            </div>
-
-        <h2 style="color: #A21A2D"><br>初见<br></h2>
-
-<p>　　　阿里巴巴于2017年10月11日到2017年10月14日在杭州举行了一年一度的科技盛会——云栖大会。出于对阿里的喜爱，我关注了阿里技术公众号 ( ps：应该算帮忙打广告了哈，可以联系我 <i class="icon-phone" style="color:blue"></i> ，哈哈哈)，9月底在翻看阿里技术的文章时发现了一个令人惊喜的活动，就是可以填写自己信息报名作为阿里小记者参观云栖大会，反馈一篇参会感就可以获得一张参会门票，这个活动对于我们这些喜欢阿里的穷苦学僧来说是再好不过的啦 (大家多多关注阿里妹的福利 -。-)。 最后，抱着试试的心态填写了我的信息，没想到马上就得到了阿里妹的电话回复，我也就正式成为了一名阿里小记者 （我骄傲 <i class="icon-sun" style="color:yellow;"></i>）</p>
-<h2 style="color: #A21A2D"><br>相识<br></h2>
-
-<p>　　　由于实习工作原因导致我只能参加13号的云栖大会，其实还是蛮遗憾的。<br>　　　10月13号早上6点多就早早的起床跟约好的一位同样喜欢阿里的小伙伴一块在南站集合前往阿里的基地 —— 杭州。<br>　　　<br>　　　<img src="http://oilfaiu6f.bkt.clouddn.com/yunqidahui/chufa2.jpg" width="600" height="400"><br>　　　<br>　　　到达云栖小镇后经过身份识别拿到了自己的牌子入场，进入场馆，最大的一个感觉就是各个行业与数据结合的越来越紧密，后面的时代是数据的时代，而非互联网时代。数据已经渗透到农业，陆地运输交通业，海上运输交通，生物工程，虚拟技术，台风检测，医疗保健，金融等等。跟自己最为贴切的感触就是，阿里通过使用阿里系软件所得到的数据可以给个人生成一个健康图（咳咳，我的数据有点糟糕，-。-）。<br>　　　<br>　　　<img src="http://oilfaiu6f.bkt.clouddn.com/yunqidahui/IMG_20171013_142858.jpg" width="600" height="400"><br>　　　<br>　　　当逛到每个展台的时候，展台的工作人员都会仔细耐心的跟我讲解他们的数据系统，以及企业的产品和现状，作为学生，我也会虚心听取的各个行业的大咖给我讲解他们的行业以及产品服务。聊的最久的是做海洋货轮大数据的公司，在展台的也是跟我年龄相仿的年轻人，我看到他们的整个地球拓扑图，显示海洋上航行所有货轮的航行路线，以及每个货轮都装有的AIS设备实时返回给基站船舶的数据，他们提供的远不仅仅这些，还有通过各个数据来预测最佳航线，来达到省燃料降低成本。我还是没有人家小哥讲的清楚，那位小哥太有耐心了。<br>　　　<br>　　　<img src="http://oilfaiu6f.bkt.clouddn.com/yunqidahui/IMG_20171013_141235.jpg" width="600" height="400"><br>　　　<br>　　　<img src="http://oilfaiu6f.bkt.clouddn.com/yunqidahui/IMG_20171013_131253.jpg" width="600" height="400"><br>　　　<br>　　　<img src="http://oilfaiu6f.bkt.clouddn.com/yunqidahui/IMG_20171013_130530.jpg" width="600" height="400"><br>　　　<br>　　　<img src="http://oilfaiu6f.bkt.clouddn.com/yunqidahui/IMG_20171013_130315.jpg" width="600" height="400"><br>　　　<br>　　　自己也做了一年互联网方面的实习了，当然也不会忘记自己的老本行( -。- )。看到了几家自己也曾经用过的东西，APICloud，ping++，也发现了现在前端快速开发的趋势，直接在网站上通过可编辑的方式来达到自己想要的各种响应页面，快速的开发出静态页面。这方面还有不少人都比较感兴趣的了解。<br>　　　<br>　　　<img src="http://oilfaiu6f.bkt.clouddn.com/IMG_20171013_145844.jpg" width="600" height="400"><br>　　　<br>　　　<img src="http://oilfaiu6f.bkt.clouddn.com/IMG_20171013_151616.jpg" width="600" height="400"><br>　　　<br>　　　<img src="http://oilfaiu6f.bkt.clouddn.com/IMG_20171013_141325.jpg" width="600" height="400"><br>　　　<br>　　　到下午，到了阿里技术专场，我选择了一个自己比较感兴趣的自然语言处理方向的专场，自然语言处理作为机器学习中比较重要的应用之一，多了解了解也刚好是自己的兴趣所在。在专场静静的听了大概一两个小时，阿里的各位大牛给我们大家介绍了阿里使用自然语言处理在自己商业上的一些应用，以及应用的大致模型和架构，其中有阿里小蜜 Chit Chat，情感分析的应用，机器阅读理解技术和应用，蚂蚁金服NLP的进展与应用（李小龙给上的课），阿里智能翻译（期间大屏幕还出现了小许问题）。基本上都通过讲解阿里自己模型所优化的地方，整个模型从数据集到模型建立再到训练再到调参，然后对比当前其他解决方案和阿里解决方案的对比。（当然整个讲解的过程都是基于阿里的业务和服务上来的）<br>　　　<br>　　　<img src="http://oilfaiu6f.bkt.clouddn.com/yunqidahui/IMG_20171013_155318.jpg" width="600" height="400"><br>　　　<br>　　　<img src="http://oilfaiu6f.bkt.clouddn.com/yunqidahui/IMG_20171013_160718.jpg" width="600" height="400"><br>　　　<br>　　　<img src="http://oilfaiu6f.bkt.clouddn.com/yunqidahui/IMG_20171013_161239.jpg" width="600" height="400"><br>　　　<br>　　　<img src="http://oilfaiu6f.bkt.clouddn.com/yunqidahui/IMG_20171013_162656.jpg" width="600" height="400"><br>　　　<br>　　　<img src="http://oilfaiu6f.bkt.clouddn.com/yunqidahui/IMG_20171013_164348.jpg" width="600" height="400"><br>　　　<br>　　　<img src="http://oilfaiu6f.bkt.clouddn.com/yunqidahui/IMG_20171013_164712.jpg" width="600" height="400"><br>　　　<br>　　　<img src="http://oilfaiu6f.bkt.clouddn.com/yunqidahui/IMG_20171013_170754.jpg" width="600" height="400"><br>　　　<br>　　　<img src="http://oilfaiu6f.bkt.clouddn.com/yunqidahui/IMG_20171013_172502.jpg" width="600" height="400"></p>
-<h2 style="color: #A21A2D"><br>终章<br></h2>
-
-<p>　　　最终，夜幕降临，即将闭馆，我也打包行李，叫了个滴滴（又给阿里帝打了个广告 -。- 生活处处有阿里啊）。<br>　　　<br>　　　<img src="http://oilfaiu6f.bkt.clouddn.com/yunqidahui/IMG_20171013_174352.jpg" width="600" height="400"><br>　　　<br>　　　<img src="http://oilfaiu6f.bkt.clouddn.com/yunqidahui/IMG_20171013_174403.jpg" width="600" height="400"></p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">生活</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">热爱技术</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">阿里</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/10/17/阿里云栖大会行记/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
   
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/page/2/">&laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><a class="extend next" rel="next" href="/page/4/">Next &raquo;</a>
+      <a class="extend prev" rel="prev" href="/page/2/">&laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><a class="extend next" rel="next" href="/page/4/">Next &raquo;</a>
     </nav>
   
 
@@ -461,10 +451,6 @@
               </li>
             
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">java基础函数整理</a>
-              </li>
-            
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">hexo</a>
               </li>
             
@@ -478,6 +464,26 @@
             
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">知识许可协议</a>
+              </li>
+            
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">java基础函数整理</a>
+              </li>
+            
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">node.js</a>
+              </li>
+            
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">gulp，webpack，brower</a>
+              </li>
+            
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">koa</a>
+              </li>
+            
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">angular</a>
               </li>
             
               <li class="article-tag-list-item">
@@ -497,23 +503,11 @@
               </li>
             
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">国足大宝</a>
-              </li>
-            
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">应用于yilia的背景特效,改进的背景特效</a>
-              </li>
-            
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">前端</a>
               </li>
             
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">vue</a>
-              </li>
-            
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">node.js</a>
               </li>
             
               <li class="article-tag-list-item">
@@ -529,23 +523,15 @@
               </li>
             
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">目标检测SSD</a>
+                <a href="javascript:void(0)" class="js-tag color5">国足大宝</a>
               </li>
             
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">gulp，webpack，brower</a>
+                <a href="javascript:void(0)" class="js-tag color2">应用于yilia的背景特效,改进的背景特效</a>
               </li>
             
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">koa</a>
-              </li>
-            
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">angular</a>
-              </li>
-            
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">CNN</a>
+                <a href="javascript:void(0)" class="js-tag color2">配置hexo</a>
               </li>
             
               <li class="article-tag-list-item">
@@ -561,7 +547,11 @@
               </li>
             
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">配置hexo</a>
+                <a href="javascript:void(0)" class="js-tag color4">CNN</a>
+              </li>
+            
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">目标检测SSD</a>
               </li>
             
             <div class="clearfix"></div>

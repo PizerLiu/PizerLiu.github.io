@@ -151,6 +151,88 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-spring使用@Aspect切面编程" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/05/09/spring使用@Aspect切面编程/">spring-boot使用@Aspect切面编程</a>
+    </h1>
+  
+
+        
+        <a href="/2018/05/09/spring使用@Aspect切面编程/" class="archive-article-date">
+  	<time datetime="2018-05-09T07:29:25.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-05-09</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+
+            <div class="article-moreinfo">
+                <div class="lastModifiedDate">
+                    <span>最后更新：</span>
+                    <time datetime="2018-05-09T08:02:55.915Z" itemprop="dateLastModified">
+                    2018-05-09
+                    </time>
+                </div>
+                <div class="copyright">
+                    <span>许可协议：</span>
+                    <a rel="license" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议</a>
+                </div>
+            </div>
+
+        <p>　　　我们遇到很多业务场景需要在做一项工作的时候，有跟这个工作相关联的工作一块执行，如在这项工作的前面执行一个事情，或者后面执行一个事情等等。<br>　　　现在开发为了方便阅读代码，不影响当前代码结构，我们采取切面编程的方式，另外通过自定义注解的方式来进一步控制切面编程。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">//自定义注解</div><div class="line">@Target(&#123;ElementType.PARAMETER, ElementType.METHOD&#125;)</div><div class="line">@Retention(RetentionPolicy.RUNTIME)</div><div class="line">@Documented</div><div class="line">public @interface pizerLog &#123;</div><div class="line">    /** 两个控制参数 **/</div><div class="line">    public String param_a() default <span class="string">""</span>;</div><div class="line">    public String param_b() default <span class="string">""</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>　　　<br>　　　spring若要用@Aspect,需要在xml内配置，才能解析切面代码<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;aop:aspectj-autoproxy/&gt;</div></pre></td></tr></table></figure></p>
+<p>　　　面向切面编程代码<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div></pre></td><td class="code"><pre><div class="line">@Component</div><div class="line">@Aspect</div><div class="line">public class PizerAspect &#123;</div><div class="line">    /**service层切面*/</div><div class="line">    private final String POINT_CUT = <span class="string">"execution(* project.Service..*(..))"</span>;</div><div class="line"></div><div class="line">    @Pointcut(POINT_CUT)</div><div class="line">    private void <span class="function"><span class="title">pointcut</span></span>()&#123;&#125;</div><div class="line"></div><div class="line">    @Before(value = <span class="string">"pointcut()"</span>)</div><div class="line">    public void <span class="keyword">do</span>AfterAdvice(JoinPoint joinPoint) throws ClassNotFoundException &#123;</div><div class="line">        System.out.println(<span class="string">"方法前面"</span>);</div><div class="line">        </div><div class="line">        String targetName = joinPoint.getTarget().getClass().getName();</div><div class="line">        String methodName = joinPoint.getSignature().getName();</div><div class="line">        Class targetClass = Class.forName(targetName);</div><div class="line">        Method[] methods = targetClass.getMethods();</div><div class="line">        String param_a = <span class="string">""</span>;</div><div class="line">        String param_b = <span class="string">""</span>;</div><div class="line">        <span class="keyword">if</span> (methods.length&gt;0)&#123;</div><div class="line">            <span class="keyword">for</span> (Method method : methods) &#123;</div><div class="line">                <span class="keyword">if</span> (method.getName().equals(methodName)) &#123;</div><div class="line">                    <span class="keyword">if</span> (method.getAnnotation(pizerLog.class)!=null)&#123;</div><div class="line">                        param_a = method.getAnnotation(pizerLog.class).param_a();</div><div class="line">                        param_b = method.getAnnotation(pizerLog.class).param_b();</div><div class="line">                        <span class="built_in">break</span>;</div><div class="line">                    &#125;</div><div class="line">                    </div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        //拿到两个参数，再根据自己业务进行二次控制</div><div class="line">        System.out.println(<span class="string">"param_a=="</span>+param_a);</div><div class="line">        System.out.println(<span class="string">"param_b=="</span>+param_b);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>　　　<br>　　　spring-boot的service代码<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">@RestController</div><div class="line">public interface RedissonTestService &#123;</div><div class="line">    @ResponseBody</div><div class="line">    @RequestMapping(<span class="string">"/aasd"</span>)</div><div class="line">    String getRedissonClient();</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>　　　<br>　　　spring-boot的RedissonTestService实现代码<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">@Controller</div><div class="line">public class RedissonTestServiceImpl implements RedissonTestService &#123;</div><div class="line"></div><div class="line">    @JournalLog(operationType = <span class="string">"asdasd"</span>,modularTypeName = <span class="string">"1"</span>)</div><div class="line">    public String <span class="function"><span class="title">getRedissonClient</span></span>() &#123;</div><div class="line">        System.out.println(<span class="string">"方法中"</span>);</div><div class="line"></div><div class="line">        <span class="built_in">return</span> <span class="string">"asd"</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>　　　最后访问GET <a href="http://localhost:11111/aasd，可以查看切面信息在执行方法前边先执行，若要在后执行或者需要其他方式，请继续查阅@After等等注解。" target="_blank" rel="external">http://localhost:11111/aasd，可以查看切面信息在执行方法前边先执行，若要在后执行或者需要其他方式，请继续查阅@After等等注解。</a></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">java</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/05/09/spring使用@Aspect切面编程/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
     <article id="post-mongodb复制集" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -232,89 +314,9 @@
 
 
   
-    <article id="post-mongodb主从配置" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/04/29/mongodb主从配置/">mongodb主从配置</a>
-    </h1>
-  
-
-        
-        <a href="/2018/04/29/mongodb主从配置/" class="archive-article-date">
-  	<time datetime="2018-04-29T05:23:01.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-04-29</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-
-            <div class="article-moreinfo">
-                <div class="lastModifiedDate">
-                    <span>最后更新：</span>
-                    <time datetime="2018-04-29T10:03:02.698Z" itemprop="dateLastModified">
-                    2018-04-29
-                    </time>
-                </div>
-                <div class="copyright">
-                    <span>许可协议：</span>
-                    <a rel="license" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议</a>
-                </div>
-            </div>
-
-        <p>　　　本教程采用docker-compose搭建，在一台机器上搭建mongodb主从配置。主机负责插入更新数据，从机负责查询数据。<br>　　　首先是机器目录结构：<br>　　　<img src="http://image.51move.cn/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20180429173959.png" alt="此处输入图片的描述"><br>　　　<br>　　　该目录下所有文件权限最好设置chmod 777，注意keyfileDir内的keyfile要设置chmod 600.(keyfile后面讲是什么)<br>　　　data_master为主机mongodb存放数据目录，data_salve_1为从机1的mongodb存放数据目录，data_salve_2为从机2的mongodb存放数据目录.mongodb_master_log,mongodb_slave_1_log,mongodb_slave_2_log,为各主从机的log存放位置。mongodb_MS.yml（有两个不一样的，下面仔细看）为docker-compose搭建各容器的文件。keyfileDir内有一文件keyfile，主要是用来主从机握手的key文件，在linux系统中，生成代码为：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">openssl rand -base64 741 &gt;&gt; keyfile</div></pre></td></tr></table></figure></p>
-<p>　　首先要建立没有登陆权限的mongodb主从，执行以下版本一mongodb_MS.yml代码，docker-compose -f mongodb_MS.yml up -d （注意把–source里的ip改成自己机器的ip）：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div></pre></td><td class="code"><pre><div class="line">version: <span class="string">"2.1"</span></div><div class="line">networks:</div><div class="line">  default:</div><div class="line">    external:</div><div class="line">      name: pizer_local_network</div><div class="line">services:</div><div class="line">  pizer_env_mongodb_master:</div><div class="line">    image: <span class="string">'docker.io/mongo:3.6-rc'</span></div><div class="line">    container_name: pizer_env_mongodb_master</div><div class="line">    hostname: pizer_env_mongodb_master</div><div class="line">    ports:</div><div class="line">      - 27008:27017</div><div class="line">    volumes:</div><div class="line">      - /root/top/mongodb_MS_docker/mongodb_master_log:/usr/mongodb_logs</div><div class="line">      - /root/top/mongodb_MS_docker/data_master:/usr/mongodb_data</div><div class="line">      - /root/top/mongodb_MS_docker/keyfileDir:/usr/mongodb_key</div><div class="line">    <span class="built_in">command</span>:</div><div class="line">      [<span class="string">'--master'</span>,<span class="string">'--bind_ip_all'</span>,<span class="string">'--dbpath=/usr/mongodb_data'</span>,<span class="string">'--logpath=/usr/mongodb_logs/mongodb_master.log'</span>]</div><div class="line">  pizer_env_mongodb_slave_1:</div><div class="line">    image: <span class="string">'docker.io/mongo:3.6-rc'</span></div><div class="line">    container_name: pizer_env_mongodb_slave_1</div><div class="line">    hostname: pizer_env_mongodb_slave_1</div><div class="line">    ports:</div><div class="line">      - 27009:27017</div><div class="line">    volumes:</div><div class="line">      - /root/top/mongodb_MS_docker/mongodb_slave_1_log:/usr/mongodb_logs</div><div class="line">      - /root/top/mongodb_MS_docker/data_slave_1:/usr/mongodb_data</div><div class="line">      - /root/top/mongodb_MS_docker/keyfileDir:/usr/mongodb_key</div><div class="line">    depends_on:</div><div class="line">      - <span class="string">"pizer_env_mongodb_master"</span></div><div class="line">    <span class="built_in">command</span>:</div><div class="line">      [<span class="string">'--slave'</span>,<span class="string">'--source=47.100.22.11:27008'</span>,<span class="string">'--bind_ip_all'</span>,<span class="string">'--dbpath=/usr/mongodb_data'</span>,<span class="string">'--logpath=/usr/mongodb_logs/mongodb_slave_1.log'</span>]</div><div class="line">  pizer_env_mongodb_slave_2:</div><div class="line">    image: <span class="string">'docker.io/mongo:3.6-rc'</span></div><div class="line">    container_name: pizer_env_mongodb_slave_2</div><div class="line">    hostname: pizer_env_mongodb_slave_2</div><div class="line">    ports:</div><div class="line">      - 27010:27017</div><div class="line">    volumes:</div><div class="line">      - /root/top/mongodb_MS_docker/mongodb_slave_2_log:/usr/mongodb_logs</div><div class="line">      - /root/top/mongodb_MS_docker/data_slave_2:/usr/mongodb_data</div><div class="line">      - /root/top/mongodb_MS_docker/keyfileDir:/usr/mongodb_key</div><div class="line">    depends_on:</div><div class="line">      - <span class="string">"pizer_env_mongodb_master"</span></div><div class="line">    <span class="built_in">command</span>:</div><div class="line">      [<span class="string">'--slave'</span>,<span class="string">'--source=47.100.22.11:27008'</span>,<span class="string">'--bind_ip_all'</span>,<span class="string">'--dbpath=/usr/mongodb_data'</span>,<span class="string">'--logpath=/usr/mongodb_logs/mongodb_slave_2.log'</span>]</div></pre></td></tr></table></figure></p>
-<p>　　　此时，mongodb主从是没有登陆账户限制的，这是极不安全的，接下来我们需要设置登陆账户。 我们进入数据库master容器，在位置/usr/bin/处执行mongo,执行下面操作：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">use admin</div><div class="line"><span class="comment">#创建root用户</span></div><div class="line">db.createUser(</div><div class="line">  &#123;</div><div class="line">    user: <span class="string">"root"</span>,</div><div class="line">    <span class="built_in">pwd</span>: <span class="string">"zxc`12`12"</span>,</div><div class="line">    roles: [ &#123; role: <span class="string">"root"</span>, db: <span class="string">"admin"</span> &#125; ]</div><div class="line">  &#125;</div><div class="line">)</div><div class="line"><span class="comment">#验证权限</span></div><div class="line">use admin</div><div class="line">db.auth(<span class="string">'root'</span>,<span class="string">'zxc`12`12'</span>)</div><div class="line"><span class="comment">#创建登陆用户（允许读写）</span></div><div class="line">use <span class="built_in">test</span></div><div class="line">db.createUser(</div><div class="line">  &#123;</div><div class="line">    user: <span class="string">"pizer"</span>,</div><div class="line">    <span class="built_in">pwd</span>: <span class="string">"zxc`12`12"</span>,</div><div class="line">    roles: [ &#123; role: <span class="string">"readWrite"</span>, db: <span class="string">"test"</span> &#125; ]</div><div class="line">  &#125;</div><div class="line">)</div></pre></td></tr></table></figure></p>
-<p>　　　登陆用户创建完毕，接下来设置数据库auth，然后重启，依然执行以下版本二mongodb_MS.yml代码，docker-compose -f mongodb_MS.yml up -d （注意把–source里的ip改成自己机器的ip）：<br>　　　<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div></pre></td><td class="code"><pre><div class="line">version: <span class="string">"2.1"</span></div><div class="line">networks:</div><div class="line">  default:</div><div class="line">    external:</div><div class="line">      name: pizer_local_network</div><div class="line">services:</div><div class="line">  pizer_env_mongodb_master:</div><div class="line">    image: <span class="string">'docker.io/mongo:3.6-rc'</span></div><div class="line">    container_name: pizer_env_mongodb_master</div><div class="line">    hostname: pizer_env_mongodb_master</div><div class="line">    ports:</div><div class="line">      - 27008:27017</div><div class="line">    volumes:</div><div class="line">      - /root/top/mongodb_MS_docker/mongodb_master_log:/usr/mongodb_logs</div><div class="line">      - /root/top/mongodb_MS_docker/data_master:/usr/mongodb_data</div><div class="line">      - /root/top/mongodb_MS_docker/keyfileDir:/usr/mongodb_key</div><div class="line">    <span class="built_in">command</span>:</div><div class="line">      [<span class="string">'--master'</span>,<span class="string">'--bind_ip_all'</span>,<span class="string">'--dbpath=/usr/mongodb_data'</span>,<span class="string">'--logpath=/usr/mongodb_logs/mongodb_master.log'</span>,<span class="string">'--auth'</span>,<span class="string">'--keyFile=/usr/mongodb_key/keyfile'</span>]</div><div class="line">  pizer_env_mongodb_slave_1:</div><div class="line">    image: <span class="string">'docker.io/mongo:3.6-rc'</span></div><div class="line">    container_name: pizer_env_mongodb_slave_1</div><div class="line">    hostname: pizer_env_mongodb_slave_1</div><div class="line">    ports:</div><div class="line">      - 27009:27017</div><div class="line">    volumes:</div><div class="line">      - /root/top/mongodb_MS_docker/mongodb_slave_1_log:/usr/mongodb_logs</div><div class="line">      - /root/top/mongodb_MS_docker/data_slave_1:/usr/mongodb_data</div><div class="line">      - /root/top/mongodb_MS_docker/keyfileDir:/usr/mongodb_key</div><div class="line">    depends_on:</div><div class="line">      - <span class="string">"pizer_env_mongodb_master"</span></div><div class="line">    <span class="built_in">command</span>:</div><div class="line">      [<span class="string">'--slave'</span>,<span class="string">'--source=47.100.22.11:27008'</span>,<span class="string">'--bind_ip_all'</span>,<span class="string">'--dbpath=/usr/mongodb_data'</span>,<span class="string">'--logpath=/usr/mongodb_logs/mongodb_slave_1.log'</span>,<span class="string">'--auth'</span>,<span class="string">'--keyFile=/usr/mongodb_key/keyfile'</span>]</div><div class="line">  pizer_env_mongodb_slave_2:</div><div class="line">    image: <span class="string">'docker.io/mongo:3.6-rc'</span></div><div class="line">    container_name: pizer_env_mongodb_slave_2</div><div class="line">    hostname: pizer_env_mongodb_slave_2</div><div class="line">    ports:</div><div class="line">      - 27010:27017</div><div class="line">    volumes:</div><div class="line">      - /root/top/mongodb_MS_docker/mongodb_slave_2_log:/usr/mongodb_logs</div><div class="line">      - /root/top/mongodb_MS_docker/data_slave_2:/usr/mongodb_data</div><div class="line">      - /root/top/mongodb_MS_docker/keyfileDir:/usr/mongodb_key</div><div class="line">    depends_on:</div><div class="line">      - <span class="string">"pizer_env_mongodb_master"</span></div><div class="line">    <span class="built_in">command</span>:</div><div class="line">      [<span class="string">'--slave'</span>,<span class="string">'--source=47.100.22.11:27008'</span>,<span class="string">'--bind_ip_all'</span>,<span class="string">'--dbpath=/usr/mongodb_data'</span>,<span class="string">'--logpath=/usr/mongodb_logs/mongodb_slave_2.log'</span>,<span class="string">'--auth'</span>,<span class="string">'--keyFile=/usr/mongodb_key/keyfile'</span>]</div></pre></td></tr></table></figure></p>
-<p>　　　</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">mongodb</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/04/29/mongodb主从配置/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
   
     <nav id="page-nav">
-      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
+      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
     </nav>
   
 
@@ -431,10 +433,6 @@
               </li>
             
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">java基础函数整理</a>
-              </li>
-            
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">hexo</a>
               </li>
             
@@ -448,6 +446,26 @@
             
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">知识许可协议</a>
+              </li>
+            
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">java基础函数整理</a>
+              </li>
+            
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">node.js</a>
+              </li>
+            
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">gulp，webpack，brower</a>
+              </li>
+            
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">koa</a>
+              </li>
+            
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">angular</a>
               </li>
             
               <li class="article-tag-list-item">
@@ -467,23 +485,11 @@
               </li>
             
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">国足大宝</a>
-              </li>
-            
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">应用于yilia的背景特效,改进的背景特效</a>
-              </li>
-            
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">前端</a>
               </li>
             
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">vue</a>
-              </li>
-            
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">node.js</a>
               </li>
             
               <li class="article-tag-list-item">
@@ -499,23 +505,15 @@
               </li>
             
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">目标检测SSD</a>
+                <a href="javascript:void(0)" class="js-tag color5">国足大宝</a>
               </li>
             
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">gulp，webpack，brower</a>
+                <a href="javascript:void(0)" class="js-tag color2">应用于yilia的背景特效,改进的背景特效</a>
               </li>
             
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">koa</a>
-              </li>
-            
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">angular</a>
-              </li>
-            
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">CNN</a>
+                <a href="javascript:void(0)" class="js-tag color2">配置hexo</a>
               </li>
             
               <li class="article-tag-list-item">
@@ -531,7 +529,11 @@
               </li>
             
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">配置hexo</a>
+                <a href="javascript:void(0)" class="js-tag color4">CNN</a>
+              </li>
+            
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">目标检测SSD</a>
               </li>
             
             <div class="clearfix"></div>
